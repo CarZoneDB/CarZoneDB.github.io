@@ -41,18 +41,18 @@
       color: var(--accent);
       text-decoration: underline;
     }
-#discordUsername {
-  color: var(--accent);
-  cursor: pointer;
-  background-color: transparent;
-  border: none;
-  padding: 0;
-  margin: 0;
-  text-decoration: underline;
-}
-#discordUsername:hover {
-  text-decoration: none;
-}
+    #discordUsername {
+      color: var(--accent);
+      cursor: pointer;
+      background-color: transparent;
+      border: none;
+      padding: 0;
+      margin: 0;
+      text-decoration: underline;
+    }
+    #discordUsername:hover {
+      text-decoration: none;
+    }
     #updateDate {
       color: var(--accent);
     }
@@ -141,7 +141,7 @@
         <option value="false">Not In Shop</option>
       </select>
       <select id="sortFilter" aria-label="Sort cars">
-        <option value="">Sort By</option>
+        <option value="" disabled selected>Select sort criteria</option>
         <option value="POWER">Horse Power (Low to High)</option>
         <option value="VMAX">Top Speed (Low to High)</option>
         <option value="ACC">Acceleration (Low to High)</option>
