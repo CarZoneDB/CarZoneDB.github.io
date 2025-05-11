@@ -2,8 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" href="https://raw.githubusercontent.com/CarZoneDB/CarZoneDB.github.io/refs/heads/main/favicon.png">
+  <meta name="description" content="CarZoneDB: Browse and filter Roblox Car Zone stock car stats" />
+  <link rel="icon" href="https://raw.githubusercontent.com/CarZoneDB/CarZoneDB.github.io/refs/heads/main/favicon.png" />
   <title>CarZoneDB</title>
   <style>
     :root {
@@ -19,6 +21,7 @@
       background-color: var(--bg-color);
       color: var(--text-color);
       font-family: Arial, sans-serif;
+      line-height: 1.5;
       padding: 20px;
     }
     header {
@@ -29,7 +32,7 @@
       font-size: 3rem;
       color: var(--accent);
     }
-    header p {
+    header p, header a {
       margin-top: 8px;
       font-size: 0.9rem;
       color: #aaa;
@@ -37,7 +40,6 @@
     header a {
       color: var(--accent);
       text-decoration: underline;
-      font-size: 0.9rem;
     }
     #discordUsername {
       color: var(--accent);
@@ -45,6 +47,10 @@
     }
     #updateDate {
       color: var(--accent);
+    }
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
     }
     .controls {
       display: flex;
@@ -72,6 +78,11 @@
       padding: 15px;
       border-radius: 10px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+      transition: transform 0.2s;
+    }
+    .car:focus-within,
+    .car:hover {
+      transform: translateY(-4px);
     }
     .car h2 {
       margin-bottom: 10px;
@@ -89,6 +100,14 @@
       display: flex;
       justify-content: space-between;
     }
+    #loading {
+      text-align: center;
+      font-size: 1.2rem;
+      color: var(--accent);
+    }
+    @media (prefers-reduced-motion) {
+      *, *::before, *::after { transition: none !important; }
+    }
   </style>
 </head>
 <body>
@@ -96,116 +115,118 @@
     <h1>CarZoneDB</h1>
     <p>Not affiliated with or endorsed by Car Zone.</p>
     <p>Contact me on Discord if there are any issues:
-      <span id="discordUsername" title="Click to copy"><u>flamespill</u></span>
+      <button id="discordUsername" aria-label="Copy Discord username" title="Click to copy">flamespill</button>
     </p>
     <p>All statistics shown refer to unmodified stock cars.</p>
-    <p>Last Updated: <span id="updateDate">May 11, 2025</span></p>
-    <p><a href="https://www.roblox.com/games/80200604311136/" target="_blank">Play Car Zone on Roblox</a></p>
+    <p>Last Updated: <time id="updateDate" datetime="2025-05-11">May 11, 2025</time></p>
+    <p><a href="https://www.roblox.com/games/80200604311136/" target="_blank" rel="noopener">Play Car Zone on Roblox</a></p>
   </header>
+  <main>
+    <section class="controls" aria-label="Filter and search cars">
+      <input type="search" id="searchInput" placeholder="Search cars..." aria-label="Search cars" />
+      <select id="typeFilter" aria-label="Filter by type">
+        <option value="">All Types</option>
+      </select>
+      <select id="shopFilter" aria-label="Filter by shop status">
+        <option value="">All Shop Status</option>
+        <option value="true">In Shop</option>
+        <option value="false">Not In Shop</option>
+      </select>
+      <select id="sortFilter" aria-label="Sort cars">
+        <option value="">Sort By</option>
+        <option value="POWER">Horse Power (Low to High)</option>
+        <option value="VMAX">Top Speed (Low to High)</option>
+        <option value="ACC">Acceleration (Low to High)</option>
+        <option value="PRICE">Price (Low to High)</option>
+        <option value="EXP">EXP for Driving (Low to High)</option>
+        <option value="MONEY">Cash for Driving (Low to High)</option>
+      </select>
+    </section>
 
-  <div class="controls">
-    <input type="text" id="searchInput" placeholder="Search cars..." />
-    <select id="typeFilter">
-      <option value="">All Types</option>
-    </select>
-    <select id="shopFilter">
-      <option value="">All Shop Status</option>
-      <option value="true">In Shop</option>
-      <option value="false">Not In Shop</option>
-    </select>
-    <select id="sortFilter">
-      <option value="">Sort By</option>
-      <option value="POWER">Horse Power (Low to High)</option>
-      <option value="VMAX">Top Speed (Low to High)</option>
-      <option value="ACC">Acceleration (Low to High)</option>
-      <option value="PRICE">Price (Low to High)</option>
-      <option value="EXP">EXP for Driving (Low to High)</option>
-      <option value="MONEY">Cash for Driving (Low to High)</option>
-    </select>
-  </div>
+    <div id="loading" role="status">Loading...</div>
+    <section id="carList" aria-live="polite"></section>
+  </main>
 
-  <div id="carList">Loading...</div>
+  <noscript>
+    <p style="text-align:center; color:#faa;">JavaScript is required to view car listings. Please enable it.</p>
+  </noscript>
 
-  <script>
-    let carsData = {};
-
-    function renderCars(data) {
+  <script defer>
+    (() => {
       const carList = document.getElementById('carList');
-      carList.innerHTML = '';
-      data.forEach(car => {
-        const carDiv = document.createElement('div');
-        carDiv.className = 'car';
-        carDiv.innerHTML = `
-          <h2>${car.CarName}</h2>
-          <div class="car-details">
-            <div><strong>Price:</strong> $${car.PRICE.toLocaleString()}</div>
-            <div><strong>Horse Power:</strong> ${car.POWER} HP</div>
-            <div><strong>V-Max:</strong> ${car.VMAX} MPH</div>
-            <div><strong>Acceleration:</strong> 0-60 in ${car.ACC} sec</div>
-            <div><strong>EXP for Driving:</strong> ${car.EXP}</div>
-            <div><strong>Cash for Driving:</strong> ${car.MONEY}</div>
-            <div><strong>Type:</strong> ${car.TYPE}</div>
-            <div><strong>In Shop:</strong> ${car.SHOP ? 'Yes' : 'No'}</div>
-          </div>
-        `;
-        carList.appendChild(carDiv);
-      });
-    }
-
-    function populateTypeFilter(data) {
-      const types = Array.from(new Set(data.map(car => car.TYPE))).sort();
+      const loading = document.getElementById('loading');
+      const searchInput = document.getElementById('searchInput');
       const typeFilter = document.getElementById('typeFilter');
-      types.forEach(type => {
-        const opt = document.createElement('option');
-        opt.value = type;
-        opt.textContent = type;
-        typeFilter.appendChild(opt);
-      });
-    }
+      const shopFilter = document.getElementById('shopFilter');
+      const sortFilter = document.getElementById('sortFilter');
+      let carsData = [];
 
-    function applyFilters() {
-      const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-      const typeVal = document.getElementById('typeFilter').value;
-      const shopVal = document.getElementById('shopFilter').value;
-      const sortVal = document.getElementById('sortFilter').value;
-
-      let filtered = Object.values(carsData).filter(car => {
-        const matchesSearch = car.CarName.toLowerCase().includes(searchTerm);
-        const matchesType = typeVal === '' || car.TYPE === typeVal;
-        const matchesShop = shopVal === '' || car.SHOP === (shopVal === 'true');
-        return matchesSearch && matchesType && matchesShop;
-      });
-
-      if (sortVal) {
-        filtered.sort((a, b) => a[sortVal] - b[sortVal]);
+      function renderCars(data) {
+        loading.hidden = true;
+        carList.innerHTML = data.length
+          ? data.map(car => `
+              <article class="car" tabindex="0">
+                <h2>${car.CarName}</h2>
+                <div class="car-details">
+                  <div><strong>Price:</strong> $${car.PRICE.toLocaleString()}</div>
+                  <div><strong>Horse Power:</strong> ${car.POWER} HP</div>
+                  <div><strong>V-Max:</strong> ${car.VMAX} MPH</div>
+                  <div><strong>Acceleration:</strong> 0-60 in ${car.ACC} sec</div>
+                  <div><strong>EXP for Driving:</strong> ${car.EXP}</div>
+                  <div><strong>Cash for Driving:</strong> ${car.MONEY}</div>
+                  <div><strong>Type:</strong> ${car.TYPE}</div>
+                  <div><strong>In Shop:</strong> ${car.SHOP ? 'Yes' : 'No'}</div>
+                </div>
+              </article>
+            `).join('')
+          : '<p>No cars match your criteria.</p>';
       }
 
-      renderCars(filtered);
-    }
+      function populateTypeFilter(data) {
+        const types = [...new Set(data.map(c => c.TYPE))].sort();
+        types.forEach(type => {
+          const opt = document.createElement('option');
+          opt.value = type;
+          opt.textContent = type;
+          typeFilter.append(opt);
+        });
+      }
 
-    fetch('cars.json')
-      .then(res => res.json())
-      .then(data => {
-        carsData = data;
-        const allCars = Object.values(data);
-        populateTypeFilter(allCars);
-        renderCars(allCars);
+      function applyFilters() {
+        const term = searchInput.value.toLowerCase();
+        const tVal = typeFilter.value;
+        const sVal = shopFilter.value;
+        const soVal = sortFilter.value;
 
-        document.getElementById('searchInput').addEventListener('input', applyFilters);
-        document.getElementById('typeFilter').addEventListener('change', applyFilters);
-        document.getElementById('shopFilter').addEventListener('change', applyFilters);
-        document.getElementById('sortFilter').addEventListener('change', applyFilters);
-      })
-      .catch(err => {
-        document.getElementById('carList').innerText = 'Failed to load car data.';
-        console.error(err);
+        let filtered = carsData.filter(c => 
+          c.CarName.toLowerCase().includes(term) &&
+          (tVal === '' || c.TYPE === tVal) &&
+          (sVal === '' || c.SHOP === (sVal === 'true'))
+        );
+        if (soVal) filtered.sort((a, b) => a[soVal] - b[soVal]);
+        renderCars(filtered);
+      }
+
+      fetch('cars.json')
+        .then(res => res.json())
+        .then(data => {
+          carsData = Object.values(data);
+          populateTypeFilter(carsData);
+          renderCars(carsData);
+          [searchInput, typeFilter, shopFilter, sortFilter]
+            .forEach(el => el.addEventListener('input', applyFilters));
+        })
+        .catch(err => {
+          loading.textContent = 'Failed to load car data.';
+          console.error(err);
+        });
+
+      document.getElementById('discordUsername').addEventListener('click', () => {
+        navigator.clipboard.writeText('flamespill')
+          .then(() => alert('Discord username copied!'))
+          .catch(err => console.error(err));
       });
-
-    document.getElementById('discordUsername').addEventListener('click', () => {
-      navigator.clipboard.writeText('flamespill')
-        .then(() => alert('Discord username copied to clipboard!'))
-        .catch(err => console.error('Clipboard copy failed:', err));
-    });
+    })();
   </script>
 </body>
 </html>
