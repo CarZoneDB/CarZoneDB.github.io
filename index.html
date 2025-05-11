@@ -81,6 +81,15 @@
       <option value="true">In Shop</option>
       <option value="false">Not In Shop</option>
     </select>
+    <select id="sortFilter">
+      <option value="">Sort By</option>
+      <option value="POWER">Horse Power (Low to High)</option>
+      <option value="VMAX">Top Speed (Low to High)</option>
+      <option value="ACC">Acceleration (Low to High)</option>
+      <option value="PRICE">Price (Low to High)</option>
+      <option value="EXP">EXP for Driving (Low to High)</option>
+      <option value="MONEY">Cash for Driving (Low to High)</option>
+    </select>
   </div>
 
   <div id="carList">Loading...</div>
@@ -124,13 +133,19 @@
       const searchTerm = document.getElementById('searchInput').value.toLowerCase();
       const typeVal = document.getElementById('typeFilter').value;
       const shopVal = document.getElementById('shopFilter').value;
+      const sortVal = document.getElementById('sortFilter').value;
 
-      const filtered = Object.values(carsData).filter(car => {
+      let filtered = Object.values(carsData).filter(car => {
         const matchesSearch = car.CarName.toLowerCase().includes(searchTerm);
         const matchesType = typeVal === '' || car.TYPE === typeVal;
         const matchesShop = shopVal === '' || car.SHOP === (shopVal === 'true');
         return matchesSearch && matchesType && matchesShop;
       });
+
+      if (sortVal) {
+        filtered.sort((a, b) => a[sortVal] - b[sortVal]);
+      }
+
       renderCars(filtered);
     }
 
@@ -145,6 +160,7 @@
         document.getElementById('searchInput').addEventListener('input', applyFilters);
         document.getElementById('typeFilter').addEventListener('change', applyFilters);
         document.getElementById('shopFilter').addEventListener('change', applyFilters);
+        document.getElementById('sortFilter').addEventListener('change', applyFilters);
       })
       .catch(err => {
         document.getElementById('carList').innerText = 'Failed to load car data.';
