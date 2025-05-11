@@ -28,6 +28,16 @@
       font-size: 3rem;
       color: var(--accent);
     }
+    header p {
+      margin-top: 8px;
+      font-size: 0.9rem;
+      color: #aaa;
+    }
+    header a {
+      color: var(--accent);
+      text-decoration: underline;
+      font-size: 0.9rem;
+    }
     .controls {
       display: flex;
       flex-wrap: wrap;
@@ -62,12 +72,14 @@
       text-align: center;
     }
     .car-details {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
+      display: flex;
+      flex-wrap: wrap;
       gap: 8px 16px;
       font-size: 0.9rem;
+      justify-content: space-between;
     }
     .car-details div {
+      min-width: 200px;
       display: flex;
       justify-content: space-between;
     }
@@ -76,7 +88,10 @@
 <body>
   <header>
     <h1>CarZoneDB</h1>
+    <p>Not affiliated with or endorsed by Car Zone.</p>
+    <p><a href="https://www.roblox.com/games/80200604311136/" target="_blank">Play Car Zone on Roblox</a></p>
   </header>
+
   <div class="controls">
     <input type="text" id="searchInput" placeholder="Search cars..." />
     <select id="typeFilter">
@@ -112,14 +127,14 @@
         carDiv.innerHTML = `
           <h2>${car.CarName}</h2>
           <div class="car-details">
-          <p><strong>Price:</strong> $${car.PRICE.toLocaleString()}</p>
-          <p><strong>Horse Power:</strong> ${car.POWER} HP</p>
-          <p><strong>V-Max:</strong> ${car.VMAX} MPH</p>
-          <p><strong>Acceleration:</strong> 0-60 in ${car.ACC} sec</p>
-          <p><strong>EXP for Driving:</strong> ${car.EXP}</p>
-          <p><strong>Cash for Driving:</strong> ${car.MONEY}</p>
-          <p><strong>Type:</strong> ${car.TYPE}</p>
-          <p><strong>In Shop:</strong> ${car.SHOP ? 'Yes' : 'No'}</p>
+            <div><strong>Price:</strong> $${car.PRICE.toLocaleString()}</div>
+            <div><strong>Horse Power:</strong> ${car.POWER} HP</div>
+            <div><strong>V-Max:</strong> ${car.VMAX} MPH</div>
+            <div><strong>Acceleration:</strong> 0-60 in ${car.ACC} sec</div>
+            <div><strong>EXP for Driving:</strong> ${car.EXP}</div>
+            <div><strong>Cash for Driving:</strong> ${car.MONEY}</div>
+            <div><strong>Type:</strong> ${car.TYPE}</div>
+            <div><strong>In Shop:</strong> ${car.SHOP ? 'Yes' : 'No'}</div>
           </div>
         `;
         carList.appendChild(carDiv);
