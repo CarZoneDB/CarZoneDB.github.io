@@ -187,26 +187,32 @@
       const sortFilter = document.getElementById('sortFilter');
       let carsData = [];
 
-      function renderCars(data) {
-        loading.hidden = true;
-        carList.innerHTML = data.length
-          ? data.map(car => ` 
-              <article class="car" tabindex="0">
-                <h2>${car.CarName}</h2>
-                <div class="car-details">
-                  <div><strong>Price:</strong> $${car.PRICE.toLocaleString()}</div>
-                  <div><strong>Horse Power:</strong> ${car.POWER} HP</div>
-                  <div><strong>V-Max:</strong> ${car.VMAX} MPH</div>
-                  <div><strong>Acceleration:</strong> 0-60 in ${car.ACC} sec</div>
-                  <div><strong>EXP for Driving:</strong> ${car.EXP}</div>
-                  <div><strong>Cash for Driving:</strong> ${car.MONEY}</div>
-                  <div><strong>Type:</strong> ${car.TYPE}</div>
-                  <div><strong>In Shop:</strong> ${car.SHOP ? 'Yes' : 'No'}</div>
-                </div>
-              </article>
-            `).join('')
-          : '<p>No cars match your criteria.</p>';
-      }
+function renderCars(data) {
+  loading.hidden = true;
+  carList.innerHTML = data.length
+    ? data.map(car => {
+        const iconId = car.ICON.replace("rbxassetid://", "");
+        const imageUrl = `https://www.roblox.com/asset-thumbnail/image?assetId=${iconId}&width=420&height=420&format=webp`;
+        return `
+          <article class="car" tabindex="0">
+            <h2>${car.CarName}</h2>
+            <img src="${imageUrl}" alt="${car.CarName} Icon" style="width:100%; border-radius:8px; margin-bottom:10px;">
+            <div class="car-details">
+              <div><strong>Price:</strong> $${car.PRICE.toLocaleString()}</div>
+              <div><strong>Horse Power:</strong> ${car.POWER} HP</div>
+              <div><strong>V-Max:</strong> ${car.VMAX} MPH</div>
+              <div><strong>Acceleration:</strong> 0-60 in ${car.ACC} sec</div>
+              <div><strong>EXP for Driving:</strong> ${car.EXP}</div>
+              <div><strong>Cash for Driving:</strong> ${car.MONEY}</div>
+              <div><strong>Type:</strong> ${car.TYPE}</div>
+              <div><strong>In Shop:</strong> ${car.SHOP ? 'Yes' : 'No'}</div>
+            </div>
+          </article>
+        `;
+      }).join('')
+    : '<p>No cars match your criteria.</p>';
+}
+
 
       function populateTypeFilter(data) {
         const types = [...new Set(data.map(c => c.TYPE))].sort();
