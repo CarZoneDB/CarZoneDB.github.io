@@ -187,64 +187,26 @@
       const sortFilter = document.getElementById('sortFilter');
       let carsData = [];
 
-function renderCars(data) {
-  loading.hidden = true;
-
-  // Step 1: Render cards with data-icon-id, but no src yet
-  carList.innerHTML = data.length
-    ? data.map(car => {
-        const iconId = car.ICON.replace("rbxassetid://", "");
-        return `
-          <article class="car" tabindex="0">
-            <h2>${car.CarName}</h2>
-            <img 
-              data-icon-id="${iconId}" 
-              alt="${car.CarName} Icon" 
-              style="width:100%; border-radius:8px; margin-bottom:10px;"
-            >
-            <div class="car-details">
-              <div><strong>Price:</strong> $${car.PRICE.toLocaleString()}</div>
-              <div><strong>Horse Power:</strong> ${car.POWER} HP</div>
-              <div><strong>V-Max:</strong> ${car.VMAX} MPH</div>
-              <div><strong>Acceleration:</strong> 0-60 in ${car.ACC} sec</div>
-              <div><strong>EXP for Driving:</strong> ${car.EXP}</div>
-              <div><strong>Cash for Driving:</strong> ${car.MONEY}</div>
-              <div><strong>Type:</strong> ${car.TYPE}</div>
-              <div><strong>In Shop:</strong> ${car.SHOP ? 'Yes' : 'No'}</div>
-            </div>
-          </article>
-        `;
-      }).join('')
-    : '<p>No cars match your criteria.</p>';
-
-  // Step 2: Collect all unique asset IDs from rendered <img> tags
-  const imgElements = document.querySelectorAll('img[data-icon-id]');
-  const assetIds = [...new Set(Array.from(imgElements).map(img => img.dataset.iconId))];
-
-  // Step 3: Fetch thumbnails in batches of 100 (Roblox's API limit)
-  const chunkSize = 100;
-  for (let i = 0; i < assetIds.length; i += chunkSize) {
-    const chunk = assetIds.slice(i, i + chunkSize);
-
-    fetch(`https://thumbnails.roblox.com/v1/assets?assetIds=${chunk.join(',')}&returnPolicy=PlaceHolderOnError&size=150x150&format=Png`)
-      .then(response => response.json())
-      .then(result => {
-        result.data.forEach(entry => {
-          const matchingImg = document.querySelector(`img[data-icon-id="${entry.targetId}"]`);
-          if (matchingImg && entry.state === "Completed") {
-            matchingImg.src = entry.imageUrl; // ✅ This sets the correct image from rbxcdn
-          }
-        });
-      })
-      .catch(error => {
-        console.error('Failed to load Roblox thumbnails:', error);
-      });
-  }
-}
-
-
-
-
+      function renderCars(data) {
+        loading.hidden = true;
+        carList.innerHTML = data.length
+          ? data.map(car => ` 
+              <article class="car" tabindex="0">
+                <h2>${car.CarName}</h2>
+                <div class="car-details">
+                  <div><strong>Price:</strong> $${car.PRICE.toLocaleString()}</div>
+                  <div><strong>Horse Power:</strong> ${car.POWER} HP</div>
+                  <div><strong>V-Max:</strong> ${car.VMAX} MPH</div>
+                  <div><strong>Acceleration:</strong> 0-60 in ${car.ACC} sec</div>
+                  <div><strong>EXP for Driving:</strong> ${car.EXP}</div>
+                  <div><strong>Cash for Driving:</strong> ${car.MONEY}</div>
+                  <div><strong>Type:</strong> ${car.TYPE}</div>
+                  <div><strong>In Shop:</strong> ${car.SHOP ? 'Yes' : 'No'}</div>
+                </div>
+              </article>
+            `).join('')
+          : '<p>No cars match your criteria.</p>';
+      }
 
       function populateTypeFilter(data) {
         const types = [...new Set(data.map(c => c.TYPE))].sort();
