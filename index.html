@@ -190,7 +190,7 @@
 function renderCars(data) {
   loading.hidden = true;
 
-  // Step 1: Render cards with placeholder <img> tags (no src yet)
+  // Step 1: Render all car cards with <img> tags but no src yet
   carList.innerHTML = data.length
     ? data.map(car => {
         const iconId = car.ICON.replace("rbxassetid://", "");
@@ -213,29 +213,29 @@ function renderCars(data) {
       }).join('')
     : '<p>No cars match your criteria.</p>';
 
-  // Step 2: Batch fetch thumbnail URLs from Roblox
+  // Step 2: Fetch thumbnails from Roblox API
   const imgElements = document.querySelectorAll('img[data-icon-id]');
-  const assetIds = Array.from(new Set(Array.from(imgElements).map(img => img.dataset.iconId)));
+  const assetIds = [...new Set([...imgElements].map(el => el.dataset.iconId))];
 
-  fetch(`https://thumbnails.roblox.com/v1/assets?assetIds=${assetIds.join(',')}&returnPolicy=PlaceHolderOnError&size=150x150&format=Png`)
-    .then(response => response.json())
-    .then(result => {
-      const idToUrl = {};
-      for (const entry of result.data) {
-        idToUrl[entry.targetId] = entry.imageUrl;
-      }
+  // Roblox allows up to 100 IDs per request — chunk if necessary
+  const chunkSize = 100;
+  for (let i = 0; i < assetIds.length; i += chunkSize) {
+    const chunk = assetIds.slice(i, i + chunkSize);
 
-      imgElements.forEach(img => {
-        const id = img.dataset.iconId;
-        if (idToUrl[id]) {
-          img.src = idToUrl[id];
-        }
-      });
-    })
-    .catch(error => {
-      console.error('Error fetching thumbnails:', error);
-    });
+    fetch(`https://thumbnails.roblox.com/v1/assets?assetIds=${chunk.join(',')}&returnPolicy=PlaceHolderOnError&size=150x150&format=Png`)
+      .then(res => res.json())
+      .then(res => {
+        res.data.forEach(entry => {
+          const img = document.querySelector(`img[data-icon-id="${entry.targetId}"]`);
+          if (img && entry.state === 'Completed') {
+            img.src = entry.imageUrl; // ✅ finally using the actual imageUrl
+          }
+        });
+      })
+      .catch(err => console.error('Thumbnail fetch error:', err));
+  }
 }
+
 
 
 
