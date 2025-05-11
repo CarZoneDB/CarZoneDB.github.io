@@ -233,7 +233,7 @@
         renderCars(filtered);
       }
 
-      fetch('cars.json')
+      fetch('https://raw.githubusercontent.com/CarZoneDB/CarZoneDB.github.io/refs/heads/main/cars.json')
         .then(res => res.json())
         .then(data => {
           carsData = Object.values(data);
