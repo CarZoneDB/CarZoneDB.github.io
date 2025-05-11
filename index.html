@@ -97,11 +97,13 @@
         carDiv.innerHTML = `
           <h2>${car.CarName}</h2>
           <p><strong>Type:</strong> ${car.TYPE}</p>
-          <p><strong>Power:</strong> ${car.POWER} HP</p>
-          <p><strong>Top Speed:</strong> ${car.VMAX} MPH</p>
+          <p><strong>Horse Power:</strong> ${car.POWER} HP</p>
+          <p><strong>Vmax:</strong> ${car.VMAX} MPH</p>
           <p><strong>Acceleration:</strong> 0-60 in ${car.ACC} sec</p>
           <p><strong>Price:</strong> $${car.PRICE.toLocaleString()}</p>
           <p><strong>In Shop:</strong> ${car.SHOP ? 'Yes' : 'No'}</p>
+          <p><strong>EXP for Driving:</strong> ${car.EXP}</p>
+          <p><strong>Cash for Driving:</strong> ${car.MONEY}</p>
         `;
         carList.appendChild(carDiv);
       });
