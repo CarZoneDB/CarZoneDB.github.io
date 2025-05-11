@@ -177,108 +177,110 @@
     <p style="text-align:center; color:#faa;">JavaScript is required to view car listings. Please enable it.</p>
   </noscript>
 
-<script defer>
-  (() => {
-    const carList = document.getElementById('carList');
-    const loading = document.getElementById('loading');
-    const searchInput = document.getElementById('searchInput');
-    const typeFilter = document.getElementById('typeFilter');
-    const shopFilter = document.getElementById('shopFilter');
-    const sortFilter = document.getElementById('sortFilter');
-    let carsData = [];
+  <script defer>
+    (() => {
+      const carList = document.getElementById('carList');
+      const loading = document.getElementById('loading');
+      const searchInput = document.getElementById('searchInput');
+      const typeFilter = document.getElementById('typeFilter');
+      const shopFilter = document.getElementById('shopFilter');
+      const sortFilter = document.getElementById('sortFilter');
+      let carsData = [];
 
-    function renderCars(data) {
-      loading.hidden = true;
-      carList.innerHTML = data.length
-        ? data.map(car => `
-            <article class="car" tabindex="0">
-              <h2>${car.CarName}</h2>
-              ${car.IMAGE ? `<img src="${car.IMAGE}" alt="${car.CarName} icon" style="width:100%; border-radius:8px; margin-bottom:10px;">` : ''}
-              <div class="car-details">
-                <div><strong>Price:</strong> $${car.PRICE.toLocaleString()}</div>
-                <div><strong>Horse Power:</strong> ${car.POWER} HP</div>
-                <div><strong>V-Max:</strong> ${car.VMAX} MPH</div>
-                <div><strong>Acceleration:</strong> 0-60 in ${car.ACC} sec</div>
-                <div><strong>EXP for Driving:</strong> ${car.EXP}</div>
-                <div><strong>Cash for Driving:</strong> ${car.MONEY}</div>
-                <div><strong>Type:</strong> ${car.TYPE}</div>
-                <div><strong>In Shop:</strong> ${car.SHOP ? 'Yes' : 'No'}</div>
-              </div>
-            </article>
-          `).join('')
-        : '<p>No cars match your criteria.</p>';
-    }
+function renderCars(data) {
+  loading.hidden = true;
+  carList.innerHTML = data.length
+    ? data.map(car => {
+        const iconId = car.ICON.replace("rbxassetid://", "");
+        const imageUrl = `https://thumbnails.roblox.com/v1/assets?assetIds=${iconId}&returnPolicy=PlaceHolderOnError&size=150x150&format=Png`;
 
-    function populateTypeFilter(data) {
-      const types = [...new Set(data.map(c => c.TYPE))].sort();
-      types.forEach(type => {
-        const opt = document.createElement('option');
-        opt.value = type;
-        opt.textContent = type;
-        typeFilter.append(opt);
+        return `
+          <article class="car" tabindex="0">
+            <h2>${car.CarName}</h2>
+            <img data-icon-id="${iconId}" alt="${car.CarName} Icon" style="width:100%; border-radius:8px; margin-bottom:10px;">
+            <div class="car-details">
+              <div><strong>Price:</strong> $${car.PRICE.toLocaleString()}</div>
+              <div><strong>Horse Power:</strong> ${car.POWER} HP</div>
+              <div><strong>V-Max:</strong> ${car.VMAX} MPH</div>
+              <div><strong>Acceleration:</strong> 0-60 in ${car.ACC} sec</div>
+              <div><strong>EXP for Driving:</strong> ${car.EXP}</div>
+              <div><strong>Cash for Driving:</strong> ${car.MONEY}</div>
+              <div><strong>Type:</strong> ${car.TYPE}</div>
+              <div><strong>In Shop:</strong> ${car.SHOP ? 'Yes' : 'No'}</div>
+            </div>
+          </article>
+        `;
+      }).join('')
+    : '<p>No cars match your criteria.</p>';
+
+  // After rendering, fetch images
+  const iconElements = document.querySelectorAll('img[data-icon-id]');
+  const ids = [...new Set([...iconElements].map(el => el.dataset.iconId))];
+
+  fetch(`https://thumbnails.roblox.com/v1/assets?assetIds=${ids.join(',')}&returnPolicy=PlaceHolderOnError&size=150x150&format=Png`)
+    .then(res => res.json())
+    .then(res => {
+      const imageMap = {};
+      res.data.forEach(entry => {
+        imageMap[entry.targetId] = entry.imageUrl;
       });
-    }
 
-    function applyFilters() {
-      const term = searchInput.value.toLowerCase();
-      const tVal = typeFilter.value;
-      const sVal = shopFilter.value;
-      const soVal = sortFilter.value;
-
-      let filtered = carsData.filter(c =>
-        c.CarName.toLowerCase().includes(term) &&
-        (tVal === '' || c.TYPE === tVal) &&
-        (sVal === '' || c.SHOP === (sVal === 'true'))
-      );
-      if (soVal) filtered.sort((a, b) => a[soVal] - b[soVal]);
-      renderCars(filtered);
-    }
-
-    async function loadAndRenderCars() {
-      try {
-        const res = await fetch('https://raw.githubusercontent.com/CarZoneDB/CarZoneDB.github.io/refs/heads/main/cars.json');
-        const data = await res.json();
-        const cars = Object.values(data);
-
-        // Extract assetIds
-        const assetIds = cars.map(c => c.ICON.replace('rbxassetid://', ''));
-
-        // Fetch image URLs from Roblox Thumbnails API
-        const thumbRes = await fetch(`https://thumbnails.roblox.com/v1/assets?assetIds=${assetIds.join(',')}&returnPolicy=PlaceHolderOnError&size=150x150&format=Png`);
-        const thumbData = await thumbRes.json();
-
-        // Map assetId to image URL
-        const imageMap = {};
-        for (const item of thumbData.data) {
-          imageMap[item.targetId] = item.imageUrl;
-        }
-
-        // Attach IMAGE to each car
-        for (const car of cars) {
-          const id = car.ICON.replace('rbxassetid://', '');
-          car.IMAGE = imageMap[id] || null;
-        }
-
-        carsData = cars;
-        populateTypeFilter(carsData);
-        renderCars(carsData);
-        [searchInput, typeFilter, shopFilter, sortFilter]
-          .forEach(el => el.addEventListener('input', applyFilters));
-      } catch (err) {
-        loading.textContent = 'Failed to load car data.';
-        console.error(err);
-      }
-    }
-
-    loadAndRenderCars();
-
-    document.getElementById('discordUsername').addEventListener('click', () => {
-      navigator.clipboard.writeText('flamespill')
-        .then(() => alert('Discord username copied!'))
-        .catch(err => console.error(err));
+      iconElements.forEach(el => {
+        const id = el.dataset.iconId;
+        el.src = imageMap[id] || '';
+      });
+    })
+    .catch(err => {
+      console.error('Failed to load thumbnails:', err);
     });
-  })();
-</script>
+}
 
+
+      function populateTypeFilter(data) {
+        const types = [...new Set(data.map(c => c.TYPE))].sort();
+        types.forEach(type => {
+          const opt = document.createElement('option');
+          opt.value = type;
+          opt.textContent = type;
+          typeFilter.append(opt);
+        });
+      }
+
+      function applyFilters() {
+        const term = searchInput.value.toLowerCase();
+        const tVal = typeFilter.value;
+        const sVal = shopFilter.value;
+        const soVal = sortFilter.value;
+
+        let filtered = carsData.filter(c =>
+          c.CarName.toLowerCase().includes(term) &&
+          (tVal === '' || c.TYPE === tVal) &&
+          (sVal === '' || c.SHOP === (sVal === 'true'))
+        );
+        if (soVal) filtered.sort((a, b) => a[soVal] - b[soVal]);
+        renderCars(filtered);
+      }
+
+      fetch('https://raw.githubusercontent.com/CarZoneDB/CarZoneDB.github.io/refs/heads/main/cars.json')
+        .then(res => res.json())
+        .then(data => {
+          carsData = Object.values(data);
+          populateTypeFilter(carsData);
+          renderCars(carsData);
+          [searchInput, typeFilter, shopFilter, sortFilter]
+            .forEach(el => el.addEventListener('input', applyFilters));
+        })
+        .catch(err => {
+          loading.textContent = 'Failed to load car data.';
+          console.error(err);
+        });
+
+      document.getElementById('discordUsername').addEventListener('click', () => {
+        navigator.clipboard.writeText('flamespill')
+          .then(() => alert('Discord username copied!'))
+          .catch(err => console.error(err));
+      });
+    })();
+  </script>
 </body>
 </html>
