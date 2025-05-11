@@ -56,11 +56,6 @@
       box-shadow: 0 2px 5px rgba(0,0,0,0.5);
       text-align: center;
     }
-    .car img {
-      width: 100px;
-      height: auto;
-      margin-bottom: 10px;
-    }
     .car h2 {
       margin-bottom: 10px;
       font-size: 1.5rem;
@@ -101,13 +96,12 @@
         carDiv.className = 'car';
         carDiv.innerHTML = `
           <h2>${car.CarName}</h2>
-          <img src="${car.ICON.replace('rbxassetid://', 'https://www.roblox.com/asset-thumbnail/image?assetId=')}&width=100&height=100&format=png" alt="${car.CarName}" />
           <p><strong>Type:</strong> ${car.TYPE}</p>
           <p><strong>Power:</strong> ${car.POWER} HP</p>
           <p><strong>Top Speed:</strong> ${car.VMAX} MPH</p>
           <p><strong>Acceleration:</strong> 0-60 in ${car.ACC} sec</p>
           <p><strong>Price:</strong> $${car.PRICE.toLocaleString()}</p>
-          <p><strong>In Shop:</strong> ${car.SHOP}</p>
+          <p><strong>In Shop:</strong> ${car.SHOP ? 'Yes' : 'No'}</p>
         `;
         carList.appendChild(carDiv);
       });
@@ -132,7 +126,7 @@
       const filtered = Object.values(carsData).filter(car => {
         const matchesSearch = car.CarName.toLowerCase().includes(searchTerm);
         const matchesType = typeVal === '' || car.TYPE === typeVal;
-        const matchesShop = shopVal === '' || String(car.SHOP) === shopVal;
+        const matchesShop = shopVal === '' || car.SHOP === (shopVal === 'true');
         return matchesSearch && matchesType && matchesShop;
       });
       renderCars(filtered);
