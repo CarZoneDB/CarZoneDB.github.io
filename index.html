@@ -72,24 +72,25 @@
       color: var(--accent);
       text-align: center;
     }
-.car-details {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  font-size: 0.9rem;
-}
-
-.car-details div {
-  display: flex;
-  justify-content: space-between;
-}
-
+    .car-details {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 0.9rem;
+    }
+    .car-details div {
+      display: flex;
+      justify-content: space-between;
+    }
   </style>
 </head>
 <body>
   <header>
     <h1>CarZoneDB</h1>
     <p>Not affiliated with or endorsed by Car Zone.</p>
+    <p>Contact me on Discord if there are any issues:
+      <span id="discordUsername" style="color: var(--accent); cursor: pointer;" title="Click to copy">flamespill</span>
+    </p>
     <p><a href="https://www.roblox.com/games/80200604311136/" target="_blank">Play Car Zone on Roblox</a></p>
   </header>
 
@@ -190,6 +191,13 @@
         document.getElementById('carList').innerText = 'Failed to load car data.';
         console.error(err);
       });
+
+    // Copy Discord username to clipboard
+    document.getElementById('discordUsername').addEventListener('click', () => {
+      navigator.clipboard.writeText('flamespill')
+        .then(() => alert('Discord username copied to clipboard!'))
+        .catch(err => console.error('Clipboard copy failed:', err));
+    });
   </script>
 </body>
 </html>
