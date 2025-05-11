@@ -88,40 +88,21 @@
   <script>
     let carsData = {};
 
-    // Mapping keys to display labels
-    const LABELS = {
-      ACC: 'Acceleration',
-      MONEY: 'Cash for Driving',
-      VMAX: 'Vmax',
-      PRICE: 'Price',
-      SHOP: 'In Shop',
-      TYPE: 'Type',
-      EXP: 'EXP for Driving',
-      POWER: 'Horse Power',
-      NEWCAR: 'New Car'
-    };
-
-    // Order to display fields
-    const DISPLAY_ORDER = ['ACC','MONEY','VMAX','PRICE','SHOP','TYPE','EXP','POWER','NEWCAR'];
-
     function renderCars(data) {
       const carList = document.getElementById('carList');
       carList.innerHTML = '';
       data.forEach(car => {
         const carDiv = document.createElement('div');
         carDiv.className = 'car';
-
-        let details = '';
-        DISPLAY_ORDER.forEach(key => {
-          if (car[key] === undefined) return;
-          let value = car[key];
-          // format value
-          if (key === 'PRICE' && typeof value === 'number') value = `$${value.toLocaleString()}`;
-          if (key === 'SHOP') value = value ? 'Yes' : 'No';
-          details += `<p><strong>\${LABELS[key]}:</strong> \${value}</p>`;
-        });
-
-        carDiv.innerHTML = `<h2>\${car.CarName}</h2>` + details;
+        carDiv.innerHTML = `
+          <h2>${car.CarName}</h2>
+          <p><strong>Type:</strong> ${car.TYPE}</p>
+          <p><strong>Power:</strong> ${car.POWER} HP</p>
+          <p><strong>Top Speed:</strong> ${car.VMAX} MPH</p>
+          <p><strong>Acceleration:</strong> 0-60 in ${car.ACC} sec</p>
+          <p><strong>Price:</strong> $${car.PRICE.toLocaleString()}</p>
+          <p><strong>In Shop:</strong> ${car.SHOP ? 'Yes' : 'No'}</p>
+        `;
         carList.appendChild(carDiv);
       });
     }
