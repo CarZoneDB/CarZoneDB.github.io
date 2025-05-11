@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Car List</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    .car { border: 1px solid #ccc; padding: 10px; margin: 10px 0; border-radius: 10px; }
+    .car img { width: 100px; height: auto; }
+  </style>
+</head>
+<body>
+  <h1>Car List</h1>
+  <div id="carList">Loading...</div>
+
+  <script>
+    fetch('cars.json')
+      .then(res => res.json())
+      .then(data => {
+        const carList = document.getElementById('carList');
+        carList.innerHTML = '';
+
+        for (const key in data) {
+          const car = data[key];
+
+          const carDiv = document.createElement('div');
+          carDiv.className = 'car';
+          carDiv.innerHTML = `
+            <h2>${car.CarName}</h2>
+            <img src="${car.ICON.replace('rbxassetid://', 'https://www.roblox.com/asset-thumbnail/image?assetId=')}&width=100&height=100&format=png" alt="${car.CarName}" />
+            <p><strong>Type:</strong> ${car.TYPE}</p>
+            <p><strong>Power:</strong> ${car.POWER} HP</p>
+            <p><strong>Top Speed:</strong> ${car.VMAX} MPH</p>
+            <p><strong>Acceleration:</strong> 0-60 in ${car.ACC} sec</p>
+            <p><strong>Price:</strong> $${car.PRICE.toLocaleString()}</p>
+            <p><strong>EXP:</strong> ${car.EXP}</p>
+            <p><strong>Money Earned:</strong> ${car.MONEY}</p>
+            <p><strong>In Shop:</strong> ${car.SHOP}</p>
+            <p><strong>New Car:</strong> ${car.NEWCAR}</p>
+          `;
+
+          carList.appendChild(carDiv);
+        }
+      })
+      .catch(err => {
+        document.getElementById('carList').innerText = 'Failed to load car data.';
+        console.error(err);
+      });
+  </script>
+</body>
+</html>
