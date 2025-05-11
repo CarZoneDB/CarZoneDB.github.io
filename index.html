@@ -39,6 +39,15 @@
       text-decoration: underline;
       font-size: 0.9rem;
     }
+    #discordUsername {
+      color: var(--accent);
+      cursor: pointer;
+    }
+    #lastUpdated {
+      margin-top: 5px;
+      color: var(--accent);
+      font-size: 0.9rem;
+    }
     .controls {
       display: flex;
       flex-wrap: wrap;
@@ -89,8 +98,9 @@
     <h1>CarZoneDB</h1>
     <p>Not affiliated with or endorsed by Car Zone.</p>
     <p>Contact me on Discord if there are any issues:
-      <span id="discordUsername" style="color: var(--accent); cursor: pointer;" title="Click to copy">flamespill</span>
+      <span id="discordUsername" title="Click to copy">flamespill</span>
     </p>
+    <p id="lastUpdated">Last Updated: <span id="updateDate"></span></p>
     <p><a href="https://www.roblox.com/games/80200604311136/" target="_blank">Play Car Zone on Roblox</a></p>
   </header>
 
@@ -195,9 +205,12 @@
     // Copy Discord username to clipboard
     document.getElementById('discordUsername').addEventListener('click', () => {
       navigator.clipboard.writeText('flamespill')
-        .then(() => alert('Discord username copied to clipboard!'))
+        .then(() => alert('Discord Username copied to clipboard.'))
         .catch(err => console.error('Clipboard copy failed:', err));
     });
+
+    // Set Last Updated date to today
+    document.getElementById('updateDate').textContent = new Date().toLocaleDateString();
   </script>
 </body>
 </html>
