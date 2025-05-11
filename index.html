@@ -88,22 +88,40 @@
   <script>
     let carsData = {};
 
+    // Mapping keys to display labels
+    const LABELS = {
+      ACC: 'Acceleration',
+      MONEY: 'Cash for Driving',
+      VMAX: 'Vmax',
+      PRICE: 'Price',
+      SHOP: 'In Shop',
+      TYPE: 'Type',
+      EXP: 'EXP for Driving',
+      POWER: 'Horse Power',
+      NEWCAR: 'New Car'
+    };
+
+    // Order to display fields
+    const DISPLAY_ORDER = ['ACC','MONEY','VMAX','PRICE','SHOP','TYPE','EXP','POWER','NEWCAR'];
+
     function renderCars(data) {
       const carList = document.getElementById('carList');
       carList.innerHTML = '';
       data.forEach(car => {
         const carDiv = document.createElement('div');
         carDiv.className = 'car';
-        // Build details dynamically, excluding ICON
+
         let details = '';
-        Object.entries(car).forEach(([key, value]) => {
-          if (key === 'ICON') return;
-          let displayValue = value;
-          if (key === 'PRICE' && typeof value === 'number') displayValue = `$${value.toLocaleString()}`;
-          if (key === 'SHOP') displayValue = value ? 'Yes' : 'No';
-          details += `<p><strong>${key.replace(/_/g, ' ')}:</strong> ${displayValue}</p>`;
+        DISPLAY_ORDER.forEach(key => {
+          if (car[key] === undefined) return;
+          let value = car[key];
+          // format value
+          if (key === 'PRICE' && typeof value === 'number') value = `$${value.toLocaleString()}`;
+          if (key === 'SHOP') value = value ? 'Yes' : 'No';
+          details += `<p><strong>\${LABELS[key]}:</strong> \${value}</p>`;
         });
-        carDiv.innerHTML = `<h2>${car.CarName}</h2>${details}`;
+
+        carDiv.innerHTML = `<h2>\${car.CarName}</h2>` + details;
         carList.appendChild(carDiv);
       });
     }
