@@ -178,81 +178,99 @@
   </noscript>
 
   <script defer>
-    (() => {
-      const carList = document.getElementById('carList');
-      const loading = document.getElementById('loading');
-      const searchInput = document.getElementById('searchInput');
-      const typeFilter = document.getElementById('typeFilter');
-      const shopFilter = document.getElementById('shopFilter');
-      const sortFilter = document.getElementById('sortFilter');
-      let carsData = [];
+(() => {
+  const carList = document.getElementById('carList');
+  const loading = document.getElementById('loading');
+  const searchInput = document.getElementById('searchInput');
+  const typeFilter = document.getElementById('typeFilter');
+  const shopFilter = document.getElementById('shopFilter');
+  const sortFilter = document.getElementById('sortFilter');
+  let carsData = [];
 
-      function renderCars(data) {
-        loading.hidden = true;
-        carList.innerHTML = data.length
-          ? data.map(car => ` 
-              <article class="car" tabindex="0">
-                <h2>${car.CarName}</h2>
-                <div class="car-details">
-                  <div><strong>Price:</strong> $${car.PRICE.toLocaleString()}</div>
-                  <div><strong>Horse Power:</strong> ${car.POWER} HP</div>
-                  <div><strong>V-Max:</strong> ${car.VMAX} MPH</div>
-                  <div><strong>Acceleration:</strong> 0-60 in ${car.ACC} sec</div>
-                  <div><strong>EXP for Driving:</strong> ${car.EXP}</div>
-                  <div><strong>Cash for Driving:</strong> ${car.MONEY}</div>
-                  <div><strong>Type:</strong> ${car.TYPE}</div>
-                  <div><strong>In Shop:</strong> ${car.SHOP ? 'Yes' : 'No'}</div>
-                </div>
-              </article>
-            `).join('')
-          : '<p>No cars match your criteria.</p>';
-      }
+  const num = v => typeof v === 'number' ? v : 0;
+  const text = v => v ?? 'N/A';
 
-      function populateTypeFilter(data) {
-        const types = [...new Set(data.map(c => c.TYPE))].sort();
-        types.forEach(type => {
-          const opt = document.createElement('option');
-          opt.value = type;
-          opt.textContent = type;
-          typeFilter.append(opt);
-        });
-      }
+  function isValidCar(c) {
+    return c &&
+      typeof c === 'object' &&
+      !Array.isArray(c) &&
+      typeof c.CarName === 'string';
+  }
 
-      function applyFilters() {
-        const term = searchInput.value.toLowerCase();
-        const tVal = typeFilter.value;
-        const sVal = shopFilter.value;
-        const soVal = sortFilter.value;
+  function renderCars(data) {
+    loading.hidden = true;
+    carList.innerHTML = data.length
+      ? data.map(car => `
+        <article class="car" tabindex="0">
+          <h2>${text(car.CarName)}</h2>
+          <div class="car-details">
+            <div><strong>Price:</strong> $${num(car.PRICE).toLocaleString()}</div>
+            <div><strong>Horse Power:</strong> ${num(car.POWER)} HP</div>
+            <div><strong>V-Max:</strong> ${num(car.VMAX)} MPH</div>
+            <div><strong>Acceleration:</strong> 0-60 in ${num(car.ACC)} sec</div>
+            <div><strong>EXP for Driving:</strong> ${num(car.EXP)}</div>
+            <div><strong>Cash for Driving:</strong> ${num(car.MONEY)}</div>
+            <div><strong>Type:</strong> ${text(car.TYPE)}</div>
+            <div><strong>In Shop:</strong> ${car.SHOP ? 'Yes' : 'No'}</div>
+          </div>
+        </article>
+      `).join('')
+      : '<p>No cars match your criteria.</p>';
+  }
 
-        let filtered = carsData.filter(c =>
-          c.CarName.toLowerCase().includes(term) &&
-          (tVal === '' || c.TYPE === tVal) &&
-          (sVal === '' || c.SHOP === (sVal === 'true'))
-        );
-        if (soVal) filtered.sort((a, b) => a[soVal] - b[soVal]);
-        renderCars(filtered);
-      }
+  function populateTypeFilter(data) {
+    const types = [...new Set(
+      data.map(c => c.TYPE).filter(Boolean)
+    )].sort();
 
-      fetch('https://raw.githubusercontent.com/CarZoneDB/CarZoneDB.github.io/refs/heads/main/cars.json')
-        .then(res => res.json())
-        .then(data => {
-          carsData = Object.values(data);
-          populateTypeFilter(carsData);
-          renderCars(carsData);
-          [searchInput, typeFilter, shopFilter, sortFilter]
-            .forEach(el => el.addEventListener('input', applyFilters));
-        })
-        .catch(err => {
-          loading.textContent = 'Failed to load car data.';
-          console.error(err);
-        });
+    types.forEach(type => {
+      const opt = document.createElement('option');
+      opt.value = type;
+      opt.textContent = type;
+      typeFilter.append(opt);
+    });
+  }
 
-      document.getElementById('discordUsername').addEventListener('click', () => {
-        navigator.clipboard.writeText('flamespill')
-          .then(() => alert('Discord username copied!'))
-          .catch(err => console.error(err));
-      });
-    })();
-  </script>
+  function applyFilters() {
+    const term = searchInput.value.toLowerCase();
+    const tVal = typeFilter.value;
+    const sVal = shopFilter.value;
+    const soVal = sortFilter.value;
+
+    let filtered = carsData.filter(c =>
+      c.CarName.toLowerCase().includes(term) &&
+      (tVal === '' || c.TYPE === tVal) &&
+      (sVal === '' || c.SHOP === (sVal === 'true'))
+    );
+
+    if (soVal) {
+      filtered.sort((a, b) => num(a[soVal]) - num(b[soVal]));
+    }
+
+    renderCars(filtered);
+  }
+
+  fetch('https://raw.githubusercontent.com/CarZoneDB/CarZoneDB.github.io/refs/heads/main/cars.json')
+    .then(res => res.json())
+    .then(data => {
+      carsData = Object.values(data).filter(isValidCar);
+      populateTypeFilter(carsData);
+      renderCars(carsData);
+      [searchInput, typeFilter, shopFilter, sortFilter]
+        .forEach(el => el.addEventListener('input', applyFilters));
+    })
+    .catch(err => {
+      loading.textContent = 'Failed to load car data.';
+      console.error(err);
+    });
+
+  document.getElementById('discordUsername').addEventListener('click', () => {
+    navigator.clipboard.writeText('flamespill')
+      .then(() => alert('Discord username copied!'))
+      .catch(console.error);
+  });
+})();
+</script>
+
 </body>
 </html>
