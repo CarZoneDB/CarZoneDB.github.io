@@ -113,13 +113,13 @@ function renderCars(data) {
             <article class="car" tabindex="0">
               <h2>${text(car.CarName)}</h2>
               <div class="badges">
-                ${car.BodyKits ? '<span class="badge">BodyKit</span>' : ''}
                 ${car.NEWCAR ? '<span class="badge new">NEW</span>' : ''}
+                ${car.TYPE === 'Limited' ? '<span class="badge limited">Limited</span>' : ''}
+                ${car.BodyKits ? '<span class="badge">BodyKit</span>' : ''}
+                ${car.GAMEPASSID ? `<span class="badge gamepass">Gamepass</span>` : ''}
                 ${packLink 
                   ? `<a href="${packLink}" target="_blank" class="badge pack" title="Click to view this pack on Roblox">${car.PACKNAME} 🔗</a>` 
                   : (car.PACKNAME ? `<span class="badge pack">${car.PACKNAME}</span>` : '')}
-                ${car.GAMEPASSID ? `<span class="badge gamepass">Gamepass</span>` : ''}
-                ${car.TYPE === 'Limited' ? '<span class="badge limited">Limited</span>' : ''}
               </div>
               <div class="car-details">
                 <div><strong>Price:</strong> $${num(car.PRICE).toLocaleString()}</div>
