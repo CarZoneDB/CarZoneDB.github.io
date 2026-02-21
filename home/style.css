@@ -64,7 +64,7 @@ main.sect {
 
 main.sect img {
   width: 250px;
-  max-width: 80%;
+  max-width: 60%;
   height: auto;
   margin-bottom: 24px;
 }
