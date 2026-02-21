@@ -263,3 +263,43 @@ footer {
     min-width: auto;
   }
 }
+
+.tick-filter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  background-color: #3a3a3a;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #555;
+  color: #F1F1F1;
+  user-select: none;
+}
+
+.tick-filter input[type="checkbox"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 1px solid #555;
+  border-radius: 4px;
+  background-color: #2b2b2b;
+  position: relative;
+  cursor: pointer;
+}
+
+.tick-filter input[type="checkbox"]:checked {
+  background-color: #8E5CF6;
+  border-color: #8E5CF6;
+}
+
+.tick-filter input[type="checkbox"]:checked::after {
+  content: "✔";
+  position: absolute;
+  top: 0;
+  left: 2px;
+  font-size: 14px;
+  color: #fff;
+}
