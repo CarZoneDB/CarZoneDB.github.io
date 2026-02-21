@@ -163,6 +163,16 @@ body {
   font-size: 0.95rem;
 }
 
+.car-icon {
+  display: block;
+  margin: 12px 0;
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+  border-radius: 12px;
+  background-color: #1a1a1a;
+}
+
 .badges {
   display: flex;
   gap: 8px;
