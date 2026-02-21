@@ -96,31 +96,45 @@
   }
 
 function renderCars(data) {
-  loading.hidden = true;
-  carList.innerHTML = data.length
-    ? data.map(car => `
-      <article class="car" tabindex="0">
-        <h2>${text(car.CarName)}</h2>
-        <div class="badges">
-          ${car.BodyKits ? '<span class="badge">BodyKit</span>' : ''}
-          ${car.NEWCAR ? '<span class="badge new">NEW</span>' : ''}
-          ${car.PACKNAME ? `<span class="badge pack">${car.PACKNAME}</span>` : ''}
-          ${car.GAMEPASSID ? `<span class="badge gamepass">Gamepass</span>` : ''}
-          ${car.TYPE === 'Limited' ? '<span class="badge limited">Limited</span>' : ''}
-        </div>
-        <div class="car-details">
-          <div><strong>Price:</strong> $${num(car.PRICE).toLocaleString()}</div>
-          <div><strong>Horse Power:</strong> ${num(car.POWER)} HP</div>
-          <div><strong>V-Max:</strong> ${num(car.VMAX)} MPH</div>
-          <div><strong>Acceleration:</strong> 0-60 in ${num(car.ACC)} sec</div>
-          <div><strong>EXP for Driving:</strong> ${num(car.EXP)}</div>
-          <div><strong>Type:</strong> ${text(car.TYPE)}</div>
-          <div><strong>In Shop:</strong> ${car.SHOP ? 'Yes' : 'No'}</div>
-        </div>
-      </article>
-    `).join('')
-    : '<p>No cars match your criteria.</p>';
-}
+    loading.hidden = true;
+    carList.innerHTML = data.length
+      ? data.map(car => {
+          const packLinks = {
+            'vip': 'https://www.roblox.com/game-pass/984631403/VIP',
+            'starter pack': 'https://www.roblox.com/game-pass/984407482/Starter-Pack',
+            'hyper pack': 'https://www.roblox.com/game-pass/1260965456/Hyper-Pack',
+            'track pack': 'https://www.roblox.com/game-pass/1105690213/Track-Pack'
+          };
+
+          const packKey = car.PACKNAME?.toLowerCase().trim();
+          const packLink = packLinks[packKey] || null;
+
+          return `
+            <article class="car" tabindex="0">
+              <h2>${text(car.CarName)}</h2>
+              <div class="badges">
+                ${car.BodyKits ? '<span class="badge">BodyKit</span>' : ''}
+                ${car.NEWCAR ? '<span class="badge new">NEW</span>' : ''}
+                ${packLink 
+                  ? `<a href="${packLink}" target="_blank" class="badge pack" title="Click to view this pack on Roblox">${car.PACKNAME} 🔗</a>` 
+                  : (car.PACKNAME ? `<span class="badge pack">${car.PACKNAME}</span>` : '')}
+                ${car.GAMEPASSID ? `<span class="badge gamepass">Gamepass</span>` : ''}
+                ${car.TYPE === 'Limited' ? '<span class="badge limited">Limited</span>' : ''}
+              </div>
+              <div class="car-details">
+                <div><strong>Price:</strong> $${num(car.PRICE).toLocaleString()}</div>
+                <div><strong>Horse Power:</strong> ${num(car.POWER)} HP</div>
+                <div><strong>V-Max:</strong> ${num(car.VMAX)} MPH</div>
+                <div><strong>Acceleration:</strong> 0-60 in ${num(car.ACC)} sec</div>
+                <div><strong>EXP for Driving:</strong> ${num(car.EXP)}</div>
+                <div><strong>Type:</strong> ${text(car.TYPE)}</div>
+                <div><strong>In Shop:</strong> ${car.SHOP ? 'Yes' : 'No'}</div>
+              </div>
+            </article>
+          `;
+        }).join('')
+      : '<p>No cars match your criteria.</p>';
+  }
 
   function populateTypeFilter(data) {
     const types = [...new Set(data.map(c => c.TYPE).filter(Boolean))].sort();
