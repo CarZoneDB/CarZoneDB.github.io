@@ -162,3 +162,40 @@ body {
   margin-bottom: 6px;
   font-size: 0.95rem;
 }
+
+.car-icon {
+  display: block;
+  margin: 12px 0;
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+  border-radius: 12px;
+  background-color: #1a1a1a;
+}
+
+.badges {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.badge {
+  background-color: #8E5CF6;
+  color: #fff;
+  padding: 2px 8px;
+  font-size: 0.75rem;
+  border-radius: 8px;
+}
+
+.badge.new {
+  background-color: #FF5C5C;
+}
+
+.badge.pack {
+  background-color: #FFA500;
+}
+
+.badge.gamepass {
+  background-color: #00BFFF;
+}
