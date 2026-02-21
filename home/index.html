@@ -1,50 +1,57 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>CarZoneDB</title>
-<link rel="icon" href="https://raw.githubusercontent.com/CarZoneDB/CarZoneDB.github.io/refs/heads/main/favicon.png" />
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CarZoneDB</title>
+  <link rel="icon" href="https://raw.githubusercontent.com/CarZoneDB/CarZoneDB.github.io/refs/heads/main/favicon.png" />
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<ul id="navbar">
-  <li class="logo">CarZoneDB</li>
-  <li><a href="/home">Home</a></li>
-  <li><a href="/cars">Cars</a></li>
-</ul>
+  <nav id="navbar">
+    <ul>
+      <li class="logo">CarZoneDB</li>
+      <li><a href="/home">Home</a></li>
+      <li><a href="/cars">Cars</a></li>
+    </ul>
+  </nav>
 
-<section class="sect">
-  <img src="https://raw.githubusercontent.com/CarZoneDB/CarZoneDB.github.io/refs/heads/main/favicon.png" alt="CarZone Logo" width="250" height="250">
-  <h1>Welcome to CarZoneDB</h1>
-  <p>A fan-created Website made to browse and filter car statistics for the Roblox Experience <b>Car Zone</b>, including price, power, top speed, and more.</p>
-</section>
+  <main class="sect">
+    <img src="https://raw.githubusercontent.com/CarZoneDB/CarZoneDB.github.io/refs/heads/main/favicon.png" 
+         alt="CarZone Logo">
+    <h1>Welcome to the CarZone Database</h1>
+    <p>
+      A fan-created website made to browse and filter car statistics for the Roblox experience 
+      <strong>Car Zone</strong>, including price, power, top speed, and more.
+    </p>
+  </main>
 
-</body>
-</html>
+  <footer>
+    <p>
+      Not affiliated with or endorsed by 
+      <a id="pageOpen" href="https://www.roblox.com/games/80200604311136/" target="_blank" rel="noopener">Car Zone</a>.
+    </p>
+    <p>
+      Contact me on Discord if there are any issues: 
+      <button id="discordUsername" aria-label="Copy Discord username" title="Click to copy">flamespill</button>
+    </p>
+  </footer>
 
-<footer>
-<p>
-  Not affiliated with or endorsed by 
-  <a id="pageOpen" href="https://www.roblox.com/games/80200604311136/" target="_blank" rel="noopener">Car Zone</a>.</p>
-  <p>Contact me on Discord if there are any issues: <button id="discordUsername" aria-label="Copy Discord username" title="Click to copy">flamespill</button></p>
-</footer>
-
-<script>
+  <script>
     const currentFolder = location.pathname.split("/")[1];
-
-    const links = document.querySelectorAll("#navbar li a");
-    links.forEach(link => {
-      const linkFolder = link.getAttribute("href").replace("/", "");
-
-      if (linkFolder === currentFolder) {
+    document.querySelectorAll("#navbar a").forEach(link => {
+      if (link.getAttribute("href").replace("/", "") === currentFolder) {
         link.classList.add("active");
       }
     });
 
     document.getElementById('discordUsername').addEventListener('click', () => {
-    navigator.clipboard.writeText('flamespill')
-      .then(() => alert('Discord Username has been copied to clipboard'))
-      .catch(console.error);
-  });
-  
-</script>
+      navigator.clipboard.writeText('flamespill')
+        .then(() => alert('Discord Username has been copied to clipboard'))
+        .catch(console.error);
+    });
+  </script>
+
+</body>
+</html>
