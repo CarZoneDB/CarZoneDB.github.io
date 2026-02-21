@@ -1,0 +1,164 @@
+body {
+    background-color: #242424;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    margin: 0;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  background-color: #2b2b2b;
+  height: 64px;
+  gap: 24px;
+  
+  position: sticky;
+  top: 0;
+  z-index: 300;
+  border-bottom: 1px solid #3a3a3a;
+}
+
+.logo {
+  font-weight: 600;
+  font-size: 18px;
+  padding: 8px 18px;
+  border-radius: 12px;
+  background-color: #8E5CF6;
+  color: #F1F1F1;
+}
+
+ul li a {
+  display: block;
+  color: #DCDCDC;
+  text-decoration: none;
+  padding: 10px 20px;
+  border-radius: 12px;
+  background-color: #2b2b2b;
+  transition: all 0.2s ease;
+}
+
+ul li a:hover {
+  background-color: #3a3a3a;
+  transform: scale(1.05);
+}
+
+.right {
+  margin-left: auto;
+}
+
+.updated {
+  font-size: 14px;
+  color: #AAAAAA;
+}
+
+ul li a.active {
+  font-weight: bold;
+  color: #F1F1F1;
+}
+
+footer {
+  background-color: #2b2b2b;
+  color: #DCDCDC;
+  text-align: center;
+  padding: 16px 0;
+  font-size: 14px;
+  border-top: 1px solid #3a3a3a;
+  margin-top: auto;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+#discordUsername {
+  color: #F1F1F1;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  text-decoration: underline;
+}
+
+#pageOpen {
+  color: #F1F1F1;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  text-decoration: underline;
+}
+
+.sect {
+  text-align: center;
+  padding: 40px 20px;
+  color: #F1F1F1;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 32px;
+
+  position: sticky;
+  top: 64px;
+  background-color: #242424;
+  padding: 16px 0;
+  z-index: 200;
+  border-bottom: 1px solid #3a3a3a;
+}
+
+.filters input[type="search"],
+.filters select {
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #555;
+  background-color: #3a3a3a;
+  color: #F1F1F1;
+  font-size: 1rem;
+  min-width: 180px;
+  flex: 1 1 200px;
+}
+
+.filters input::placeholder {
+  color: #AAAAAA;
+}
+
+#carList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.car {
+  background-color: #2b2b2b;
+  padding: 20px;
+  border-radius: 12px;
+  text-align: left;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.car:focus,
+.car:hover {
+  background-color: #3a3a3a;
+  transform: scale(1.02);
+  outline: none;
+}
+
+.car h2 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  font-size: 1.5rem;
+}
+
+.car-details div {
+  margin-bottom: 6px;
+  font-size: 0.95rem;
+}
