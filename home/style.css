@@ -139,3 +139,21 @@ footer {
     padding: 12px 8px;
   }
 }
+
+.browse-cars-btn {
+  display: inline-block;
+  padding: 12px 28px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #F1F1F1;
+  background-color: #8E5CF6;
+  border-radius: 12px;
+  text-decoration: none;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.browse-cars-btn:hover {
+  background-color: #A66CFF;
+  transform: scale(1.05);
+  box-shadow: 0 0 10px #8E5CF6;
+}
