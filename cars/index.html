@@ -11,7 +11,8 @@
   <li class="logo">CarZoneDB</li>
   <li><a href="/home">Home</a></li>
   <li><a href="/cars">Cars</a></li>
-  <li class="right updated">Page Last Updated: February 21, 2026</li>
+  <li><a href="/codes">Codes</a></li>
+  <li class="right updated">Page Last Updated: January 31, 2026</li>
 </ul>
 
 <section class="sect" aria-label="Filter and search cars"> 
@@ -75,6 +76,12 @@
       ? data.map(car => `
         <article class="car" tabindex="0">
           <h2>${text(car.CarName)}</h2>
+          <div class="badges">
+            ${car.BodyKits ? '<span class="badge">BodyKit</span>' : ''}
+            ${car.NEWCAR ? '<span class="badge new">NEW</span>' : ''}
+            ${car.PACKNAME ? `<span class="badge pack">${car.PACKNAME}</span>` : ''}
+            ${car.GAMEPASSID ? `<span class="badge gamepass">Gamepass</span>` : ''}
+          </div>
           <div class="car-details">
             <div><strong>Price:</strong> $${num(car.PRICE).toLocaleString()}</div>
             <div><strong>Horse Power:</strong> ${num(car.POWER)} HP</div>
@@ -121,40 +128,24 @@
     renderCars(filtered);
   }
 
-  fetch('https://raw.githubusercontent.com/CarZoneDB/CarZoneDB.github.io/refs/heads/main/cars.json')
-    .then(res => res.json())
-    .then(data => {
-      carsData = Object.values(data).filter(isValidCar);
-      populateTypeFilter(carsData);
-      renderCars(carsData);
-      [searchInput, typeFilter, shopFilter, sortFilter]
-        .forEach(el => el.addEventListener('input', applyFilters));
-    })
-    .catch(err => {
-      loading.textContent = 'Failed to load car data.';
-      console.error(err);
-    });
+fetch('https://raw.githubusercontent.com/CarZoneDB/CarZoneDB.github.io/refs/heads/main/cars.json')
+  .then(res => res.json())
+  .then(data => {
+    carsData = Object.values(data)
+      .filter(isValidCar)
+      // Sort NEW cars first immediately
+      .sort((a, b) => (b.NEWCAR ? 1 : 0) - (a.NEWCAR ? 1 : 0));
+
+    populateTypeFilter(carsData);
+    renderCars(carsData);
+
+    [searchInput, typeFilter, shopFilter, sortFilter]
+      .forEach(el => el.addEventListener('input', applyFilters));
+  })
+  .catch(err => {
+    loading.textContent = 'Failed to load car data.';
+    console.error(err);
+  });
 
 })();
 </script>
-
-<script>
-    const currentFolder = location.pathname.split("/")[1];
-
-    const links = document.querySelectorAll("#navbar li a");
-    links.forEach(link => {
-      const linkFolder = link.getAttribute("href").replace("/", "");
-
-      if (linkFolder === currentFolder) {
-        link.classList.add("active");
-      }
-    });
-
-    document.getElementById('discordUsername').addEventListener('click', () => {
-    navigator.clipboard.writeText('flamespill')
-      .then(() => alert('Discord Username has been copied to clipboard'))
-      .catch(console.error);
-  });
-  
-</script>
-
