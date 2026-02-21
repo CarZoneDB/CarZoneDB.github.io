@@ -62,9 +62,15 @@ fetch('https://raw.githubusercontent.com/CarZoneDB/CarZoneDB.github.io/refs/head
   .then(res => res.json())
   .then(data => {
     const totalCars = Object.values(data).filter(car => car.CarName).length;
+    const lastUpdated = data.lastUpdated ? new Date(data.lastUpdated) : null;
+
+    const formattedDate = lastUpdated
+      ? new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(lastUpdated)
+      : 'Unknown';
 
     document.getElementById('carCount').innerHTML = `
-      Keeping track of <span style="color: #8E5CF6; font-weight: bold;">${totalCars.toLocaleString()}</span> cars in the game — and counting.
+      Keeping track of <span style="color: #8E5CF6; font-weight: bold;">${totalCars.toLocaleString()}</span> cars in the game — and counting.<br>
+      Database Last updated: <span style="color: #8E5CF6; font-weight: bold;">${formattedDate}</span>
     `;
   })
   .catch(err => {
