@@ -16,7 +16,7 @@
       <li class="logo">CarZoneDB</li>
       <li><a href="/home">Home</a></li>
       <li><a href="/cars">Cars</a></li>
-      <li class="right updated">Last Updated: February 21, 2026</li>
+      <li class="right updated">Database Last Updated: Loading...</li>
     </ul>
   </nav>
 
@@ -166,6 +166,13 @@ function renderCars(data) {
   fetch('https://raw.githubusercontent.com/CarZoneDB/CarZoneDB.github.io/refs/heads/main/cars.json')
     .then(res => res.json())
     .then(data => {
+      const updatedEl = document.querySelector('.updated');
+if (data.lastUpdated) {
+  const lastUpdatedDate = new Date(data.lastUpdated);
+  const formattedDate = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(lastUpdatedDate);
+  updatedEl.textContent = 'Database Last Updated: ' + formattedDate;
+}
+      
       carsData = Object.values(data).filter(isValidCar).sort((a,b)=> (b.NEWCAR?1:0)-(a.NEWCAR?1:0));
       populateTypeFilter(carsData);
       renderCars(carsData);
