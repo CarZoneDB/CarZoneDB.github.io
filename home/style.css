@@ -43,23 +43,19 @@ nav#navbar a {
   padding: 10px 20px;
   border-radius: 12px;
   background-color: #2b2b2b;
-  transition: all 0.2s ease;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
 nav#navbar a:hover {
   background-color: #3a3a3a;
+  box-shadow: 0 0 6px #3a3a3a;
   transform: scale(1.05);
+  outline: none;
 }
 
 nav#navbar a.active {
   font-weight: bold;
   color: #F1F1F1;
-}
-
-nav#navbar .right {
-  margin-left: auto;
-  font-size: 14px;
-  color: #AAAAAA;
 }
 
 main.sect {
@@ -69,9 +65,16 @@ main.sect {
 }
 
 main.sect img {
-  width: clamp(300px, 40vw, 500px);
+  width: 250px;
+  max-width: 60%;
   height: auto;
   margin-bottom: 24px;
+}
+
+@media (max-width: 600px) {
+  main.sect img {
+    width: 150px;
+  }
 }
 
 main.sect h1 {
@@ -92,7 +95,6 @@ footer {
   padding: 16px 8px;
   font-size: 14px;
   border-top: 1px solid #3a3a3a;
-  margin-top: auto;
 }
 
 #discordUsername,
@@ -110,103 +112,6 @@ footer {
 #discordUsername:hover,
 #pageOpen:hover {
   color: #8E5CF6;
-}
-
-.filters {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 16px;
-  margin-bottom: 32px;
-  position: sticky;
-  top: 64px;
-  background-color: #242424;
-  padding: 16px 0;
-  z-index: 200;
-  border-bottom: 1px solid #3a3a3a;
-}
-
-.filters input[type="search"],
-.filters select {
-  padding: 10px 14px;
-  border-radius: 8px;
-  border: 1px solid #555;
-  background-color: #3a3a3a;
-  color: #F1F1F1;
-  font-size: 1rem;
-  min-width: 180px;
-  flex: 1 1 200px;
-}
-
-.filters input::placeholder {
-  color: #AAAAAA;
-}
-
-#carList {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 24px;
-}
-
-.car {
-  background-color: #2b2b2b;
-  padding: 20px;
-  border-radius: 12px;
-  text-align: left;
-  transition: transform 0.2s ease, background-color 0.2s ease;
-}
-
-.car:focus,
-.car:hover {
-  background-color: #3a3a3a;
-  transform: scale(1.02);
-  outline: none;
-}
-
-.car h2 {
-  margin-top: 0;
-  margin-bottom: 12px;
-  font-size: 1.5rem;
-}
-
-.car-details div {
-  margin-bottom: 6px;
-  font-size: 0.95rem;
-}
-
-.badges {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 12px;
-  flex-wrap: wrap;
-}
-
-.badge {
-  background-color: #8E5CF6;
-  color: #fff;
-  padding: 2px 8px;
-  font-size: 0.75rem;
-  border-radius: 8px;
-}
-
-.badge.limited {
-  background-color: #FF4DB8;
-  color: #fff;
-}
-
-.badge.new {
-  background-color: #FF3B3B;
-  color: #fff;
-}
-
-.badge.pack {
-  background-color: #FF9F1C;
-  color: #fff;
-}
-
-.badge.gamepass {
-  background-color: #1E90FF;
-  color: #fff;
 }
 
 @media (max-width: 600px) {
@@ -229,25 +134,8 @@ footer {
     padding: 40px 12px;
   }
 
-  main.sect img {
-    width: 150px;
-  }
-
   footer {
     font-size: 12px;
     padding: 12px 8px;
-  }
-
-  .filters {
-    flex-direction: column;
-    gap: 12px;
-    top: 0;
-    padding: 12px 0;
-  }
-
-  .filters input[type="search"],
-  .filters select {
-    flex: 1 1 100%;
-    min-width: auto;
   }
 }
