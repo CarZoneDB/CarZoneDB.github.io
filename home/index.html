@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<ul id="navbar">
+  <li class="logo">CarZoneDB</li>
+  <li><a href="/home">Home</a></li>
+  <li><a href="/cars">Cars</a></li>
+  <li><a href="/codes">Codes</a></li>
+  <li class="right updated">Page Last Updated: February 21st 2026</li>
+</ul>
+
+</body>
+</html>
+
+<footer>
+  <p>Not affiliated with or endorsed by <a id="pageOpen" href="https://www.roblox.com/games/80200604311136/" target="_blank" rel="noopener">Car Zone</a>.</p>
+    <p>Contact me on Discord if there are any issues:
+    <button id="discordUsername" aria-label="Copy Discord username" title="Click to copy">flamespill</button>.
+    </p>
+</footer>
+
+<script>
+    const currentFolder = location.pathname.split("/")[1];
+
+    const links = document.querySelectorAll("#navbar li a");
+    links.forEach(link => {
+      const linkFolder = link.getAttribute("href").replace("/", "");
+
+      if (linkFolder === currentFolder) {
+        link.classList.add("active");
+      }
+    });
+
+    document.getElementById('discordUsername').addEventListener('click', () => {
+    navigator.clipboard.writeText('flamespill')
+      .then(() => alert('Discord Username has been copied to clipboard'))
+      .catch(console.error);
+  });
+  
+</script>
