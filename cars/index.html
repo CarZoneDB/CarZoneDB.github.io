@@ -1,189 +1,210 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CarZoneDB - Cars</title>
-  <meta name="description" content="Database of the cars in the Roblox experience Car Zone"/>
-  <meta name="keywords" content="Car Zone stats, Car Zone car list, Car Zone vehicles, Car Zone Roblox cars, Car Zone database, Car Zone horsepower, Car Zone top speed, Car Zone acceleration, Car Zone prices, Car Zone limited cars, Car Zone gamepass cars, Car Zone fastest car, Car Zone best car, Roblox Car Zone stats">
-  <link rel="icon" href="https://raw.githubusercontent.com/CarZoneDB/CarZoneDB.github.io/refs/heads/main/favicon.png" />
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CarZoneDB - Cars</title>
+<meta name="description" content="Database of the cars in the Roblox experience Car Zone"/>
+<meta name="keywords" content="Car Zone stats, Car Zone car list, Car Zone vehicles, Car Zone Roblox cars, Car Zone database, Car Zone horsepower, Car Zone top speed, Car Zone acceleration, Car Zone prices, Car Zone limited cars, Car Zone gamepass cars, Car Zone fastest car, Car Zone best car, Roblox Car Zone stats">
+<link rel="icon" href="https://raw.githubusercontent.com/CarZoneDB/CarZoneDB.github.io/refs/heads/main/favicon.png" />
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <nav id="navbar">
-    <ul>
-      <li class="logo">CarZoneDB</li>
-      <li><a href="/home">Home</a></li>
-      <li><a href="/cars">Cars</a></li>
-      <li class="right updated">Database Last Updated: Loading...</li>
-    </ul>
-  </nav>
+<nav id="navbar">
+<ul>
+<li class="logo">CarZoneDB</li>
+<li><a href="/home">Home</a></li>
+<li><a href="/cars">Cars</a></li>
+<li class="right updated">Database Last Updated: Loading...</li>
+</ul>
+</nav>
 
-  <main class="sect">
-    <p>
-      All listed statistics are based on unmodified, stock cars.
-      <br>Please note that some in-game vehicles may have slightly different statistics than those displayed here.
-    </p>
-  </main>
+<main class="sect">
+<p>
+All listed statistics are based on unmodified, stock cars.
+<br>Please note that some in-game vehicles may have slightly different statistics than those displayed here.
+</p>
+</main>
 
-  <main class="sect" aria-label="Filter and search cars">
-    <div class="filters">
-      <input type="search" id="searchInput" placeholder="Search cars..." aria-label="Search cars" />
-      <select id="typeFilter" aria-label="Filter by type">
-        <option value="">All Types</option>
-      </select>
-      <select id="shopFilter" aria-label="Filter by shop status">
-        <option value="">All Shop Status</option>
-        <option value="true">In Shop</option>
-        <option value="false">Not In Shop</option>
-      </select>
-      <select id="sortFilter" aria-label="Sort cars">
-        <option value="">Sort By (None)</option>
-        <option value="POWER">Horse Power (Low to High)</option>
-        <option value="VMAX">Top Speed (Low to High)</option>
-        <option value="ACC">Acceleration (Low to High)</option>
-        <option value="PRICE">Price (Low to High)</option>
-        <option value="EXP">EXP for Driving (Low to High)</option>
-      </select>
-    </div>
+<main class="sect" aria-label="Filter and search cars">
+<div class="filters">
+<input type="search" id="searchInput" placeholder="Search cars..." aria-label="Search cars" />
 
-    <div id="loading">Loading cars...</div>
-    <div id="carList"></div>
-  </main>
+<select id="typeFilter" aria-label="Filter by type">
+<option value="">All Types</option>
+</select>
 
-  <footer>
-    <p>
-      Not affiliated with or endorsed by 
-      <a id="pageOpen" href="https://www.roblox.com/games/80200604311136/" target="_blank" rel="noopener">Car Zone</a>.
-    </p>
-    <p>
-      Contact me on Discord if there are any issues: 
-      <button id="discordUsername" aria-label="Copy Discord username" title="Click to copy">flamespill</button>
-    </p>
-  </footer>
+<select id="shopFilter" aria-label="Filter by shop status">
+<option value="">All Shop Status</option>
+<option value="true">In Shop ✅</option>
+<option value="false">Not In Shop ❌</option>
+</select>
 
-  <script>
-    const currentFolder = location.pathname.split("/")[1];
-    document.querySelectorAll("#navbar a").forEach(link => {
-      if (link.getAttribute("href").replace("/", "") === currentFolder) {
-        link.classList.add("active");
-      }
-    });
+<select id="sortFilter" aria-label="Sort cars">
+<option value="">Sort By (None)</option>
+<option value="POWER">Horse Power (Low to High)</option>
+<option value="VMAX">Top Speed (Low to High)</option>
+<option value="ACC">Acceleration (Low to High)</option>
+<option value="PRICE">Price (Low to High)</option>
+<option value="EXP">EXP for Driving (Low to High)</option>
+</select>
 
-    document.getElementById('discordUsername').addEventListener('click', () => {
-      navigator.clipboard.writeText('flamespill')
-        .then(() => alert('Discord Username has been copied to clipboard'))
-        .catch(console.error);
-    });
-  </script>
+<label class="tick-filter">
+<input type="checkbox" id="bodyKitFilter" />
+Body Kits
+</label>
 
-  <script defer>
+<label class="tick-filter">
+<input type="checkbox" id="newCarFilter" />
+New Cars
+</label>
+
+<label class="tick-filter">
+<input type="checkbox" id="limitedFilter" />
+Limited Cars
+</label>
+
+</div>
+
+<div id="loading">Loading cars...</div>
+<div id="carList"></div>
+</main>
+
+<footer>
+<p>
+Not affiliated with or endorsed by
+<a id="pageOpen" href="https://www.roblox.com/games/80200604311136/" target="_blank" rel="noopener">Car Zone</a>.
+</p>
+<p>
+Contact me on Discord if there are any issues:
+<button id="discordUsername" aria-label="Copy Discord username" title="Click to copy">flamespill</button>
+</p>
+</footer>
+
+<script>
+const currentFolder = location.pathname.split("/")[1];
+document.querySelectorAll("#navbar a").forEach(link => {
+  if (link.getAttribute("href").replace("/", "") === currentFolder) link.classList.add("active");
+});
+document.getElementById('discordUsername').addEventListener('click', () => {
+  navigator.clipboard.writeText('flamespill')
+  .then(() => alert('Discord Username has been copied to clipboard'))
+  .catch(console.error);
+});
+</script>
+
+<script defer>
 (() => {
-  const carList = document.getElementById('carList');
-  const loading = document.getElementById('loading');
-  const searchInput = document.getElementById('searchInput');
-  const typeFilter = document.getElementById('typeFilter');
-  const shopFilter = document.getElementById('shopFilter');
-  const sortFilter = document.getElementById('sortFilter');
-  let carsData = [];
+const carList = document.getElementById('carList');
+const loading = document.getElementById('loading');
+const searchInput = document.getElementById('searchInput');
+const typeFilter = document.getElementById('typeFilter');
+const shopFilter = document.getElementById('shopFilter');
+const sortFilter = document.getElementById('sortFilter');
+const bodyKitFilter = document.getElementById('bodyKitFilter');
+const newCarFilter = document.getElementById('newCarFilter');
+const limitedFilter = document.getElementById('limitedFilter');
 
-  const num = v => typeof v === 'number' ? v : 0;
-  const text = v => v ?? 'N/A';
+let carsData = [];
 
-  function isValidCar(c) {
-    return c && typeof c === 'object' && !Array.isArray(c) && typeof c.CarName === 'string';
-  }
+const num = v => typeof v === 'number' ? v : 0;
+const text = v => v ?? 'N/A';
+
+function isValidCar(c) {
+  return c && typeof c === 'object' && !Array.isArray(c) && typeof c.CarName === 'string';
+}
 
 function renderCars(data) {
-    loading.hidden = true;
-    carList.innerHTML = data.length
-      ? data.map(car => {
-          const packLinks = {
-            'vip': 'https://www.roblox.com/game-pass/984631403/VIP',
-            'starter pack': 'https://www.roblox.com/game-pass/984407482/Starter-Pack',
-            'hyper pack': 'https://www.roblox.com/game-pass/1260965456/Hyper-Pack',
-            'track pack': 'https://www.roblox.com/game-pass/1105690213/Track-Pack'
-          };
+  loading.hidden = true;
+  carList.innerHTML = data.length
+    ? data.map(car => {
+      const packLinks = {
+        'vip': 'https://www.roblox.com/game-pass/984631403/VIP',
+        'starter pack': 'https://www.roblox.com/game-pass/984407482/Starter-Pack',
+        'hyper pack': 'https://www.roblox.com/game-pass/1260965456/Hyper-Pack',
+        'track pack': 'https://www.roblox.com/game-pass/1105690213/Track-Pack'
+      };
+      const packKey = car.PACKNAME?.toLowerCase().trim();
+      const packLink = packLinks[packKey] || null;
 
-          const packKey = car.PACKNAME?.toLowerCase().trim();
-          const packLink = packLinks[packKey] || null;
-
-          return `
-            <article class="car" tabindex="0">
-              <h2>${text(car.CarName)}</h2>
-              <div class="badges">
-                ${car.NEWCAR ? '<span class="badge new">NEW</span>' : ''}
-                ${car.TYPE === 'Limited' ? '<span class="badge limited">Limited</span>' : ''}
-                ${car.BodyKits ? '<span class="badge">BodyKit</span>' : ''}
-                ${car.GAMEPASSID ? `<span class="badge gamepass">Gamepass</span>` : ''}
-                ${packLink 
-                  ? `<a href="${packLink}" target="_blank" class="badge pack" title="Click to view this pack on Roblox">${car.PACKNAME} 🔗</a>` 
-                  : (car.PACKNAME ? `<span class="badge pack">${car.PACKNAME}</span>` : '')}
-              </div>
-              <div class="car-details">
-                <div><strong>Price:</strong> $${num(car.PRICE).toLocaleString()}</div>
-                <div><strong>Horse Power:</strong> ${num(car.POWER)} HP</div>
-                <div><strong>V-Max:</strong> ${num(car.VMAX)} MPH</div>
-                <div><strong>Acceleration:</strong> 0-60 in ${num(car.ACC)} sec</div>
-                <div><strong>EXP for Driving:</strong> ${num(car.EXP)}</div>
-                <div><strong>Type:</strong> ${text(car.TYPE)}</div>
-                <div><strong>In Shop:</strong> ${car.SHOP ? 'Yes' : 'No'}</div>
-              </div>
-            </article>
-          `;
-        }).join('')
-      : '<p>No cars match your criteria.</p>';
-  }
-
-  function populateTypeFilter(data) {
-    const types = [...new Set(data.map(c => c.TYPE).filter(Boolean))].sort();
-    types.forEach(type => {
-      const opt = document.createElement('option');
-      opt.value = type;
-      opt.textContent = type;
-      typeFilter.append(opt);
-    });
-  }
-
-  function applyFilters() {
-    const term = searchInput.value.toLowerCase();
-    const tVal = typeFilter.value;
-    const sVal = shopFilter.value;
-    const soVal = sortFilter.value;
-
-    let filtered = carsData.filter(c =>
-      c.CarName.toLowerCase().includes(term) &&
-      (tVal === '' || c.TYPE === tVal) &&
-      (sVal === '' || c.SHOP === (sVal === 'true'))
-    );
-
-    if (soVal) filtered.sort((a, b) => num(a[soVal]) - num(b[soVal]));
-
-    renderCars(filtered);
-  }
-
-  fetch('https://raw.githubusercontent.com/CarZoneDB/CarZoneDB.github.io/refs/heads/main/cars.json')
-    .then(res => res.json())
-    .then(data => {
-      const updatedEl = document.querySelector('.updated');
-if (data.lastUpdated) {
-  const lastUpdatedDate = new Date(data.lastUpdated);
-  const formattedDate = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(lastUpdatedDate);
-  updatedEl.textContent = 'Database Last Updated: ' + formattedDate;
+      return `<article class="car" tabindex="0">
+<h2>${text(car.CarName)}</h2>
+<div class="badges">
+${car.NEWCAR ? '<span class="badge new">NEW</span>' : ''}
+${car.TYPE === 'Limited' ? '<span class="badge limited">Limited</span>' : ''}
+${car.BodyKits ? '<span class="badge">BodyKit</span>' : ''}
+${car.GAMEPASSID ? '<span class="badge gamepass">Gamepass</span>' : ''}
+${packLink ? `<a href="${packLink}" target="_blank" class="badge pack" title="Click to view this pack on Roblox">${car.PACKNAME} 🔗</a>`
+: (car.PACKNAME ? `<span class="badge pack">${car.PACKNAME}</span>` : '')}
+</div>
+<div class="car-details">
+<div><strong>Price:</strong> $${num(car.PRICE).toLocaleString()}</div>
+<div><strong>Horse Power:</strong> ${num(car.POWER)} HP</div>
+<div><strong>V-Max:</strong> ${num(car.VMAX)} MPH</div>
+<div><strong>Acceleration:</strong> 0-60 in ${num(car.ACC)} sec</div>
+<div><strong>EXP for Driving:</strong> ${num(car.EXP)}</div>
+<div><strong>Type:</strong> ${text(car.TYPE)}</div>
+<div><strong>In Shop:</strong> ${car.SHOP ? 'Yes' : 'No'}</div>
+</div>
+</article>`;
+    }).join('')
+    : '<p>No cars match your criteria.</p>';
 }
-      
-      carsData = Object.values(data).filter(isValidCar).sort((a,b)=> (b.NEWCAR?1:0)-(a.NEWCAR?1:0));
-      populateTypeFilter(carsData);
-      renderCars(carsData);
-      [searchInput, typeFilter, shopFilter, sortFilter].forEach(el => el.addEventListener('input', applyFilters));
-    })
-    .catch(err => {
-      loading.textContent = 'Failed to load car data.';
-      console.error(err);
-    });
-})();
-  </script>
 
+function populateTypeFilter(data) {
+  const types = [...new Set(data.map(c => c.TYPE).filter(Boolean))].sort();
+  types.forEach(type => {
+    const opt = document.createElement('option');
+    opt.value = type;
+    opt.textContent = type;
+    typeFilter.append(opt);
+  });
+}
+
+function applyFilters() {
+  const term = searchInput.value.toLowerCase();
+  const tVal = typeFilter.value;
+  const sVal = shopFilter.value;
+  const soVal = sortFilter.value;
+  const body = bodyKitFilter.checked;
+  const newC = newCarFilter.checked;
+  const limited = limitedFilter.checked;
+
+  let filtered = carsData.filter(c =>
+    c.CarName.toLowerCase().includes(term) &&
+    (tVal === '' || c.TYPE === tVal) &&
+    (sVal === '' || c.SHOP === (sVal === 'true')) &&
+    (!body || c.BodyKits) &&
+    (!newC || c.NEWCAR) &&
+    (!limited || c.TYPE === 'Limited')
+  );
+
+  if (soVal) filtered.sort((a, b) => num(a[soVal]) - num(b[soVal]));
+  renderCars(filtered);
+}
+
+fetch('https://raw.githubusercontent.com/CarZoneDB/CarZoneDB.github.io/refs/heads/main/cars.json')
+.then(res => res.json())
+.then(data => {
+  const updatedEl = document.querySelector('.updated');
+  if (data.lastUpdated) {
+    const lastUpdatedDate = new Date(data.lastUpdated);
+    const formattedDate = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(lastUpdatedDate);
+    updatedEl.textContent = 'Database Last Updated: ' + formattedDate;
+  }
+
+  carsData = Object.values(data).filter(isValidCar).sort((a,b)=> (b.NEWCAR?1:0)-(a.NEWCAR?1:0));
+  populateTypeFilter(carsData);
+  renderCars(carsData);
+
+  [searchInput, typeFilter, shopFilter, sortFilter, bodyKitFilter, newCarFilter, limitedFilter].forEach(el => el.addEventListener('input', applyFilters));
+})
+.catch(err => {
+  loading.textContent = 'Failed to load car data.';
+  console.error(err);
+});
+})();
+</script>
 </body>
 </html>
