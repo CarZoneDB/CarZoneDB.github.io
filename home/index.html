@@ -24,9 +24,13 @@
          alt="CarZone Logo">
     <h1>Welcome to the Car Zone Database</h1>
     <p>
-      A fan-created website made to browse and filter car statistics for the Roblox experience 
-      <strong>Car Zone</strong>, including price, power, top speed, and more.
+<p>
+  A fan-created website made to browse and filter car statistics for the Roblox experience 
+  <a href="https://www.roblox.com/games/80200604311136/" target="_blank" rel="noopener" style="color: #8E5CF6;">
+    <strong>Car Zone</strong></a>, including price, power, top speed, and more.
+</p>
     </p>
+    <p id="carCount"></p>
   </main>
 
   <footer>
@@ -53,6 +57,21 @@
         .then(() => alert('Discord Username has been copied to clipboard'))
         .catch(console.error);
     });
+
+fetch('https://raw.githubusercontent.com/CarZoneDB/CarZoneDB.github.io/refs/heads/main/cars.json')
+  .then(res => res.json())
+  .then(data => {
+    const totalCars = Object.values(data).filter(car => car.CarName).length;
+
+    document.getElementById('carCount').innerHTML = `
+      Keeping track of <span style="color: #8E5CF6; font-weight: bold;">${totalCars.toLocaleString()}</span> cars in the game — and counting.
+    `;
+  })
+  .catch(err => {
+    document.getElementById('carCount').textContent = 'Failed to load car data.';
+    console.error(err);
+  });
+
   </script>
 
 </body>
