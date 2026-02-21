@@ -3,7 +3,7 @@
 <head>
 <title>CarZoneDB</title>
 <link rel="icon" href="https://raw.githubusercontent.com/CarZoneDB/CarZoneDB.github.io/refs/heads/main/favicon.png" />
-<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -12,13 +12,32 @@
   <li><a href="/home">Home</a></li>
   <li><a href="/cars">Cars</a></li>
   <li><a href="/codes">Codes</a></li>
-  <li class="right updated">Page Last Updated: February 21st 2026</li>
+  <li class="right updated">Page Last Updated: January 31, 2026</li>
 </ul>
 
-<section class="sect">
-  <img src="https://raw.githubusercontent.com/CarZoneDB/CarZoneDB.github.io/refs/heads/main/favicon.png" alt="CarZone Logo" width="250" height="250">
-  <h1>Welcome to CarZoneDB</h1>
-  <p>A fan-created Website made to browse and filter car statistics for the Roblox Experience <b>Car Zone</b>, including price, power, top speed, and more.</p>
+<section class="sect" aria-label="Filter and search cars"> 
+  <div class="filters">
+    <input type="search" id="searchInput" placeholder="Search cars..." aria-label="Search cars" />
+    <select id="typeFilter" aria-label="Filter by type">
+      <option value="">All Types</option>
+    </select>
+    <select id="shopFilter" aria-label="Filter by shop status">
+      <option value="">All Shop Status</option>
+      <option value="true">In Shop</option>
+      <option value="false">Not In Shop</option>
+    </select>
+    <select id="sortFilter" aria-label="Sort cars">
+      <option value="">Sort By (None)</option>
+      <option value="POWER">Horse Power (Low to High)</option>
+      <option value="VMAX">Top Speed (Low to High)</option>
+      <option value="ACC">Acceleration (Low to High)</option>
+      <option value="PRICE">Price (Low to High)</option>
+      <option value="EXP">EXP for Driving (Low to High)</option>
+    </select>
+  </div>
+
+  <div id="loading">Loading cars...</div>
+  <div id="carList"></div>
 </section>
 
 </body>
@@ -30,6 +49,95 @@
     <button id="discordUsername" aria-label="Copy Discord username" title="Click to copy">flamespill</button>.
     </p>
 </footer>
+
+<script defer>
+(() => {
+  const carList = document.getElementById('carList');
+  const loading = document.getElementById('loading');
+  const searchInput = document.getElementById('searchInput');
+  const typeFilter = document.getElementById('typeFilter');
+  const shopFilter = document.getElementById('shopFilter');
+  const sortFilter = document.getElementById('sortFilter');
+  let carsData = [];
+
+  const num = v => typeof v === 'number' ? v : 0;
+  const text = v => v ?? 'N/A';
+
+  function isValidCar(c) {
+    return c &&
+      typeof c === 'object' &&
+      !Array.isArray(c) &&
+      typeof c.CarName === 'string';
+  }
+
+  function renderCars(data) {
+    loading.hidden = true;
+    carList.innerHTML = data.length
+      ? data.map(car => `
+        <article class="car" tabindex="0">
+          <h2>${text(car.CarName)}</h2>
+          <div class="car-details">
+            <div><strong>Price:</strong> $${num(car.PRICE).toLocaleString()}</div>
+            <div><strong>Horse Power:</strong> ${num(car.POWER)} HP</div>
+            <div><strong>V-Max:</strong> ${num(car.VMAX)} MPH</div>
+            <div><strong>Acceleration:</strong> 0-60 in ${num(car.ACC)} sec</div>
+            <div><strong>EXP for Driving:</strong> ${num(car.EXP)}</div>
+            <div><strong>Type:</strong> ${text(car.TYPE)}</div>
+            <div><strong>In Shop:</strong> ${car.SHOP ? 'Yes' : 'No'}</div>
+          </div>
+        </article>
+      `).join('')
+      : '<p>No cars match your criteria.</p>';
+  }
+
+  function populateTypeFilter(data) {
+    const types = [...new Set(
+      data.map(c => c.TYPE).filter(Boolean)
+    )].sort();
+
+    types.forEach(type => {
+      const opt = document.createElement('option');
+      opt.value = type;
+      opt.textContent = type;
+      typeFilter.append(opt);
+    });
+  }
+
+  function applyFilters() {
+    const term = searchInput.value.toLowerCase();
+    const tVal = typeFilter.value;
+    const sVal = shopFilter.value;
+    const soVal = sortFilter.value;
+
+    let filtered = carsData.filter(c =>
+      c.CarName.toLowerCase().includes(term) &&
+      (tVal === '' || c.TYPE === tVal) &&
+      (sVal === '' || c.SHOP === (sVal === 'true'))
+    );
+
+    if (soVal) {
+      filtered.sort((a, b) => num(a[soVal]) - num(b[soVal]));
+    }
+
+    renderCars(filtered);
+  }
+
+  fetch('https://raw.githubusercontent.com/CarZoneDB/CarZoneDB.github.io/refs/heads/main/cars.json')
+    .then(res => res.json())
+    .then(data => {
+      carsData = Object.values(data).filter(isValidCar);
+      populateTypeFilter(carsData);
+      renderCars(carsData);
+      [searchInput, typeFilter, shopFilter, sortFilter]
+        .forEach(el => el.addEventListener('input', applyFilters));
+    })
+    .catch(err => {
+      loading.textContent = 'Failed to load car data.';
+      console.error(err);
+    });
+
+})();
+</script>
 
 <script>
     const currentFolder = location.pathname.split("/")[1];
@@ -50,3 +158,4 @@
   });
   
 </script>
+
