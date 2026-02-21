@@ -132,7 +132,7 @@ fetch('https://raw.githubusercontent.com/CarZoneDB/CarZoneDB.github.io/refs/head
   .then(data => {
     carsData = Object.values(data)
       .filter(isValidCar)
-      // Sort NEW cars first immediately
+
       .sort((a, b) => (b.NEWCAR ? 1 : 0) - (a.NEWCAR ? 1 : 0));
 
     populateTypeFilter(carsData);
