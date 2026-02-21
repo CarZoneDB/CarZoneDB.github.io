@@ -61,8 +61,8 @@ New Cars
 </label>
 
 <label class="tick-filter">
-<input type="checkbox" id="limitedFilter" />
-Limited Cars
+<input type="checkbox" id="gamepassFilter" />
+Gamepass Cars
 </label>
 
 </div>
@@ -104,7 +104,7 @@ const shopFilter = document.getElementById('shopFilter');
 const sortFilter = document.getElementById('sortFilter');
 const bodyKitFilter = document.getElementById('bodyKitFilter');
 const newCarFilter = document.getElementById('newCarFilter');
-const limitedFilter = document.getElementById('limitedFilter');
+const gamepassFilter = document.getElementById('gamepassFilter');
 
 let carsData = [];
 
@@ -169,7 +169,7 @@ function applyFilters() {
   const soVal = sortFilter.value;
   const body = bodyKitFilter.checked;
   const newC = newCarFilter.checked;
-  const limited = limitedFilter.checked;
+  const gamepass = gamepassFilter.checked;
 
   let filtered = carsData.filter(c =>
     c.CarName.toLowerCase().includes(term) &&
@@ -177,7 +177,7 @@ function applyFilters() {
     (sVal === '' || c.SHOP === (sVal === 'true')) &&
     (!body || c.BodyKits) &&
     (!newC || c.NEWCAR) &&
-    (!limited || c.TYPE === 'Limited')
+    (!gamepass || c.GAMEPASSID)
   );
 
   if (soVal) filtered.sort((a, b) => num(a[soVal]) - num(b[soVal]));
@@ -198,7 +198,7 @@ fetch('https://raw.githubusercontent.com/CarZoneDB/CarZoneDB.github.io/refs/head
   populateTypeFilter(carsData);
   renderCars(carsData);
 
-  [searchInput, typeFilter, shopFilter, sortFilter, bodyKitFilter, newCarFilter, limitedFilter].forEach(el => el.addEventListener('input', applyFilters));
+  [searchInput, typeFilter, shopFilter, sortFilter, bodyKitFilter, newCarFilter, gamepassFilter].forEach(el => el.addEventListener('input', applyFilters));
 })
 .catch(err => {
   loading.textContent = 'Failed to load car data.';
