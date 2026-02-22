@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CarZoneDB - Races</title>
+<meta name="description" content="Database for cars, races, and more in the Roblox experience Car Zone."/>
+<meta name="keywords" content="Car Zone stats, Car Zone car list, Car Zone vehicles, Car Zone Roblox cars, Car Zone database, Car Zone horsepower, Car Zone top speed, Car Zone acceleration, Car Zone prices, Car Zone limited cars, Car Zone gamepass cars, Car Zone fastest car, Car Zone best car, Roblox Car Zone stats">
+<link rel="icon" href="https://raw.githubusercontent.com/CarZoneDB/CarZoneDB.github.io/refs/heads/main/favicon.png"/>
+<link rel="stylesheet" href="../base.css">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav id="navbar">
+<ul>
+<li class="logo">CarZoneDB</li>
+<li><a href="/home">Home</a></li>
+<li><a href="/cars">Cars</a></li>
+<li><a href="/races">Races</a></li>
+<li class="right updated">Database Last Updated: Loading...</li>
+</ul>
+</nav>
+
+<main class="sect">
+
+<div id="loading">Loading races...</div>
+<div id="raceList"></div>
+
+</main>
+
+  <footer>
+    <p>
+      Not affiliated with or endorsed by 
+      <a id="pageOpen" href="https://www.roblox.com/games/80200604311136/" target="_blank" rel="noopener">Car Zone</a>.
+    </p>
+    <p>
+      Contact me on Discord if there are any issues: 
+      <button id="discordUsername" aria-label="Copy Discord username" title="Click to copy">flamespill</button>
+    </p>
+  </footer>
+
+<div id="mapModal" class="modal" onclick="closeMap()">
+  <div class="modal-content" onclick="event.stopPropagation()">
+    <span class="close" onclick="closeMap()">&times;</span>
+    <img id="mapImage" src="" alt="Map">
+  </div>
+</div>
+
+<script>
+const currentFolder = location.pathname.split("/")[1];
+document.querySelectorAll("#navbar a").forEach(link => {
+  if (link.getAttribute("href").replace("/", "") === currentFolder)
+    link.classList.add("active");
+});
+
+const raceList = document.getElementById('raceList');
+const loading = document.getElementById('loading');
+
+function extractAssetId(url) {
+  if (!url) return null;
+  const match = url.match(/(\d+)/);
+  return match ? match[1] : null;
+}
+
+function openMap(url) {
+  const assetId = extractAssetId(url);
+  if (!assetId) return;
+
+  const apiUrl = `https://thumbnails.roproxy.com/v1/assets?assetIds=${assetId}&returnPolicy=PlaceHolder&size=420x420&format=png`;
+
+  fetch(apiUrl)
+    .then(res => res.json())
+    .then(data => {
+      const imageUrl = data?.data?.[0]?.imageUrl;
+      if (imageUrl) {
+        document.getElementById("mapImage").src = imageUrl;
+        document.getElementById("mapModal").style.display = "flex";
+      }
+    })
+    .catch(console.error);
+}
+
+function closeMap() {
+  document.getElementById("mapModal").style.display = "none";
+  document.getElementById("mapImage").src = "";
+}
+
+function renderRaces(data) {
+  loading.hidden = true;
+
+  const { lastUpdated, ...races } = data;
+
+  const difficultyOrder = {
+    EASY: 1,
+    MEDIUM: 2,
+    HARD: 3
+  };
+
+  const sortedRaces = Object.entries(races).sort(([, a], [, b]) => {
+    const diffA = (a.Dificulty ?? '').toUpperCase();
+    const diffB = (b.Dificulty ?? '').toUpperCase();
+
+    return (difficultyOrder[diffA] || 99) - (difficultyOrder[diffB] || 99);
+  });
+
+  raceList.innerHTML = sortedRaces.map(([name, race]) => {
+
+    const rewards = race.Rewards ?? [];
+    const difficulty = (race.Dificulty ?? '').toUpperCase();
+
+    return `
+<article class="car" tabindex="0">
+<h2>${name}</h2>
+
+<div class="badges">
+${difficulty === 'EASY' ? '<span class="badge easy">Easy</span>' : ''}
+${difficulty === 'MEDIUM' ? '<span class="badge medium">Medium</span>' : ''}
+${difficulty === 'HARD' ? '<span class="badge hard">Hard</span>' : ''}
+</div>
+
+<div class="car-details">
+<div><strong>Laps:</strong> ${race.Laps ?? 'N/A'}</div>
+<div><strong>Player Limit:</strong> ${rewards.length}</div>
+<div>
+<strong>Map:</strong>
+<button class="footer-btn" onclick="openMap('${race.Map}')">
+View Map
+</button>
+</div>
+</div>
+
+<h3>Rewards</h3>
+${rewards.map((r, i) => `
+<div>
+<strong>${i + 1}. Place:</strong>
+$${(r[0] ?? 0).toLocaleString()} | ${r[1] ?? 0} XP
+</div>
+`).join('')}
+
+</article>
+`;
+  }).join('');
+}
+
+fetch('https://raw.githubusercontent.com/CarZoneDB/CarZoneDB.github.io/refs/heads/main/czgameinfo/races.json')
+.then(res => res.json())
+.then(data => {
+
+  const updatedEl = document.querySelector('.updated');
+
+  if (data.lastUpdated) {
+    const date = new Date(data.lastUpdated);
+    updatedEl.textContent =
+      'Database Last Updated: ' +
+      new Intl.DateTimeFormat('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+      }).format(date);
+  }
+
+  renderRaces(data);
+})
+.catch(() => {
+  loading.textContent = 'Failed to load race data.';
+});
+</script>
+
+</body>
+</html>
