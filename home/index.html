@@ -64,7 +64,7 @@
         .catch(console.error);
     });
 
-fetch('https://raw.githubusercontent.com/CarZoneDB/CarZoneDB.github.io/refs/heads/main/cars.json')
+fetch('https://raw.githubusercontent.com/CarZoneDB/CarZoneDB.github.io/refs/heads/main/czgameinfo/cars.json')
   .then(res => res.json())
   .then(data => {
     const totalCars = Object.values(data).filter(car => car.CarName).length;
