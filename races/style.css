@@ -21,7 +21,7 @@ main.sect {
   padding: 20px;
   border-radius: 12px;
   text-align: left;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
 }
 
 .car:hover {
@@ -30,9 +30,38 @@ main.sect {
   transform: scale(1.02);
 }
 
-.car h2 {
-  margin-top: 0;
-  margin-bottom: 12px;
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.card-header h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  line-height: 1.2;
+  flex: 1;
+}
+
+.map-btn {
+  padding: 4px 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #F1F1F1;
+  background-color: #8E5CF6;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
+  margin-top: 0.15em; 
+}
+.map-btn:hover {
+  background-color: #A66CFF;
+  transform: scale(1.05);
+  box-shadow: 0 0 8px #8E5CF6;
 }
 
 .badges {
@@ -54,14 +83,60 @@ main.sect {
 .badge.medium { background: #f59e0b; }
 .badge.hard { background: #ef4444; }
 
+.car-details {
+  margin-bottom: 14px;
+}
+
 .car-details div {
-  margin-bottom: 6px;
+  margin-bottom: 4px;
   font-size: 0.95rem;
 }
 
-a.map-link {
-  color: #8E5CF6;
+.top-rewards {
+  margin-bottom: 6px;
+}
+
+.reward-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  margin-bottom: 4px;
+}
+
+.reward-row .xp {
+  color: #AAAAAA;
+}
+
+.medal {
+  width: 22px;
+}
+
+.rewards-dropdown {
+  margin-top: 6px;
+}
+
+.rewards-dropdown summary {
   cursor: pointer;
+  font-size: 0.85rem;
+  color: #AAAAAA;
+  list-style: none;
+}
+
+.rewards-dropdown summary::-webkit-details-marker {
+  display: none;
+}
+
+.rewards-dropdown summary::after {
+  content: " ▾";
+  font-size: 0.8rem;
+}
+
+.rewards-dropdown[open] summary::after {
+  content: " ▴";
+}
+
+.rewards-content {
+  margin-top: 6px;
 }
 
 footer {
@@ -71,7 +146,6 @@ footer {
   border-top: 1px solid #3a3a3a;
   font-size: 14px;
 }
-
 
 .modal {
   display: none;
@@ -106,18 +180,3 @@ footer {
   cursor: pointer;
   color: white;
 }
-
-.footer-btn {
-  background: none;
-  border: none;
-  color: #F1F1F1;
-  text-decoration: underline;
-  cursor: pointer;
-  font-size: 14px;
-  padding: 0;
-}
-
-.footer-btn:hover {
-  color: #8E5CF6;
-}
-
