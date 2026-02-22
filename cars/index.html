@@ -185,7 +185,7 @@ function applyFilters() {
   renderCars(filtered);
 }
 
-fetch('https://raw.githubusercontent.com/CarZoneDB/CarZoneDB.github.io/refs/heads/main/cars.json')
+fetch('https://raw.githubusercontent.com/CarZoneDB/CarZoneDB.github.io/refs/heads/main/czgameinfo/cars.json')
 .then(res => res.json())
 .then(data => {
   const updatedEl = document.querySelector('.updated');
