@@ -101,7 +101,6 @@ function renderRaces(data) {
   const sortedRaces = Object.entries(races).sort(([, a], [, b]) => {
     const diffA = (a.Dificulty ?? '').toUpperCase();
     const diffB = (b.Dificulty ?? '').toUpperCase();
-
     return (difficultyOrder[diffA] || 99) - (difficultyOrder[diffB] || 99);
   });
 
@@ -112,7 +111,12 @@ function renderRaces(data) {
 
     return `
 <article class="car" tabindex="0">
-<h2>${name}</h2>
+<div class="card-header">
+  <h2>${name}</h2>
+  <button class="map-btn" onclick="openMap('${race.Map}')">
+    Map
+  </button>
+</div>
 
 <div class="badges">
 ${difficulty === 'EASY' ? '<span class="badge easy">Easy</span>' : ''}
@@ -121,23 +125,40 @@ ${difficulty === 'HARD' ? '<span class="badge hard">Hard</span>' : ''}
 </div>
 
 <div class="car-details">
-<div><strong>Laps:</strong> ${race.Laps ?? 'N/A'}</div>
-<div><strong>Player Limit:</strong> ${rewards.length}</div>
-<div>
-<strong>Map:</strong>
-<button class="footer-btn" onclick="openMap('${race.Map}')">
-View Map
-</button>
-</div>
+  <div class="details-left">
+    <div><strong>Laps:</strong> ${race.Laps ?? 'N/A'}</div>
+    <div><strong>Player Limit:</strong> ${rewards.length}</div>
+  </div>
 </div>
 
 <h3>Rewards</h3>
-${rewards.map((r, i) => `
-<div>
-<strong>${i + 1}. Place:</strong>
-$${(r[0] ?? 0).toLocaleString()} | ${r[1] ?? 0} XP
+
+<div class="top-rewards">
+${rewards.slice(0, 3).map((r, i) => `
+<div class="reward-row">
+<span class="medal">
+${i === 0 ? '🥇' : i === 1 ? '🥈' : '🥉'}
+</span>
+$${(r[0] ?? 0).toLocaleString()}
+<span class="xp">${r[1] ?? 0} XP</span>
 </div>
 `).join('')}
+</div>
+
+${rewards.length > 3 ? `
+<details class="rewards-dropdown">
+<summary>View All Rewards</summary>
+<div class="rewards-content">
+${rewards.slice(3).map((r, i) => `
+<div class="reward-row">
+<strong>${i + 4}.</strong>
+$${(r[0] ?? 0).toLocaleString()}
+<span class="xp">${r[1] ?? 0} XP</span>
+</div>
+`).join('')}
+</div>
+</details>
+` : ''}
 
 </article>
 `;
