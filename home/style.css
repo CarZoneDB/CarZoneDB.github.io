@@ -1,4 +1,4 @@
-.browse-cars-btn {
+.browse-btn {
   display: inline-block;
   padding: 12px 28px;
   font-size: 1rem;
@@ -10,7 +10,7 @@
   transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.browse-cars-btn:hover {
+.browse-btn:hover {
   background-color: #A66CFF;
   transform: scale(1.05);
   box-shadow: 0 0 10px #8E5CF6;
