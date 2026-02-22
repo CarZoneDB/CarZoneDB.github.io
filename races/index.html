@@ -55,6 +55,12 @@ document.querySelectorAll("#navbar a").forEach(link => {
     link.classList.add("active");
 });
 
+document.getElementById('discordUsername').addEventListener('click', () => {
+navigator.clipboard.writeText('flamespill')
+.then(() => alert('Discord Username has been copied to clipboard'))
+.catch(console.error);
+});
+
 const raceList = document.getElementById('raceList');
 const loading = document.getElementById('loading');
 
