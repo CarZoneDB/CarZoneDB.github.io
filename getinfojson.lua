@@ -1,16 +1,20 @@
 local HttpService = cloneref(game:GetService("HttpService"))
+local ReplicatedStorage = cloneref(game:GetService("ReplicatedStorage"))
 
-local carstats = require(game:GetService("ReplicatedStorage").Configs.CarStats)
-local raceinfo = require(game:GetService("ReplicatedStorage").Events.RaceRemotes.RaceInformation)
-local racerewards = require(game:GetService("ReplicatedStorage").Events.RaceRemotes.Rewards)
+local carstats = require(ReplicatedStorage.Configs.CarStats)
+local raceinfo = require(ReplicatedStorage.Events.RaceRemotes.RaceInformation)
+local racerewards = require(ReplicatedStorage.Events.RaceRemotes.Rewards)
 
--- cars info
-local carsjson = HttpService:JSONEncode({
-	lastUpdated = os.date("!%Y-%m-%d"),
-	Cars = carstats
-})
+local date = os.date("!%Y-%m-%d")
 
--- race info
+-- cars
+local carStatsJson = HttpService:JSONEncode(carstats)
+
+local carsFinalJson =
+'{"lastUpdated": "' .. date .. '", ' ..
+string.sub(carStatsJson, 2)
+
+-- races
 local combinedraces = {}
 
 for i,v in pairs(raceinfo) do
@@ -22,11 +26,14 @@ for i,v in pairs(raceinfo) do
 	}
 end
 
-local racesjson = HttpService:JSONEncode({
-	lastUpdated = os.date("!%Y-%m-%d"),
-	Races = combinedraces
-})
+local racesJson = HttpService:JSONEncode(combinedraces)
 
+local racesFinalJson =
+'{"lastUpdated": "' .. date .. '", ' ..
+string.sub(racesJson, 2)
+
+-- save
 makefolder("czgameinfo")
-writefile("czgameinfo/cars.json", carsjson)
-writefile("czgameinfo/races.json", racesjson)
+
+writefile("czgameinfo/cars.json", carsFinalJson)
+writefile("czgameinfo/races.json", racesFinalJson)
