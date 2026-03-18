@@ -19,13 +19,14 @@ input,select,button{margin:2px}
 </style>
 
 <button id="toggleGuide" onclick="toggleGuide()">
-  ▼ Show Guide
+  ▲ Hide Guide
 </button>
 
-<div id="guide" style="display:none;">
+<div id="guide">
 <b>It is recommended to download the HTML and run it locally on your PC.</b><br>
 When run online (e.g. via GitHub), requests may go through shared servers and hit global rate limits.
-Running locally uses your own IP, making downloads faster and more reliable.<br><br>
+Running locally uses your own IP, making downloads faster and more reliable.<br>
+<button onclick="downloadHTML()">⬇ Download this HTML</button><br><br>
 
 <b>• Batch</b><br>
 How many cars are requested per API call.<br>
@@ -80,6 +81,25 @@ function toggleGuide(){
   } else {
     g.style.display = "none";
     btn.textContent = "▼ Show Guide";
+  }
+}
+
+async function downloadHTML(){
+  try{
+    const url = "https://raw.githubusercontent.com/CarZoneDB/CarZoneDB.github.io/refs/heads/main/czassetdownloader/index.html";
+
+    const res = await fetch(url, {cache: "no-store"});
+    const text = await res.text();
+
+    const blob = new Blob([text], {type: "text/html"});
+    const a = document.createElement("a");
+
+    a.href = URL.createObjectURL(blob);
+    a.download = "CZAssetDownloader.html";
+    a.click();
+
+  }catch(e){
+    console.log("Failed to download HTML.");
   }
 }
 
