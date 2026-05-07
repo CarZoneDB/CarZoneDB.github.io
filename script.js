@@ -1,6 +1,6 @@
 Promise.all([
-  fetch('https://raw.githubusercontent.com/CarZoneDB/CarZoneDB.github.io/refs/heads/main/czgameinfo/cars.json').then(res => res.json()),
-  fetch('https://raw.githubusercontent.com/CarZoneDB/CarZoneDB.github.io/refs/heads/main/czgameinfo/races.json').then(res => res.json())
+  fetch('https://raw.githubusercontent.com/CarZoneDB/CarZoneDB.github.io/refs/heads/main/assets/infojsons/cars.json').then(res => res.json()),
+  fetch('https://raw.githubusercontent.com/CarZoneDB/CarZoneDB.github.io/refs/heads/main/assets/infojsons/races.json').then(res => res.json())
 ])
 .then(([carData, raceData]) => {
 
