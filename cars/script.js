@@ -144,7 +144,7 @@ document.querySelectorAll("input[name='price'], #minPrice, #maxPrice")
   .forEach(el => el.addEventListener("input", applyFilters));
 
 // ===== FETCH DATA =====
-fetch("https://raw.githubusercontent.com/CarZoneDB/CarZoneDB.github.io/refs/heads/main/czgameinfo/cars.json")
+fetch("https://raw.githubusercontent.com/CarZoneDB/CarZoneDB.github.io/refs/heads/main/assets/infojsons/cars.json")
   .then(res => res.json())
   .then(data => {
     carsData = Object.values(data).filter(c => c.CarName);
