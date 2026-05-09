@@ -25,16 +25,19 @@ body {
 }
 
 /* ===== NAVBAR ===== */
-nav#navbar {
-    position: sticky;
+.navbar {
+    position: fixed;
     top: 0;
+    left: 0;
+    width: 100%;
+
     z-index: 300;
 
     background: var(--foreground-color);
     border-bottom: 1px solid var(--border-color);
 }
 
-nav#navbar ul {
+.navbar ul {
     list-style: none;
 
     display: flex;
@@ -48,11 +51,11 @@ nav#navbar ul {
     box-sizing: border-box;
 }
 
-nav#navbar li {
+.navbar li {
     flex: 0 0 auto;
 }
 
-nav#navbar .logo {
+.navbar .logo {
     font-weight: 600;
     font-size: 18px;
 
@@ -66,7 +69,7 @@ nav#navbar .logo {
     white-space: nowrap;
 }
 
-nav#navbar a {
+.navbar a {
     display: block;
 
     padding: 10px 20px;
@@ -79,18 +82,23 @@ nav#navbar a {
     white-space: nowrap;
 }
 
-nav#navbar a:hover {
+.navbar a:hover {
     background: var(--border-color);
     transform: scale(1.03);
 }
 
-nav#navbar a.active {
+.navbar a.active {
     font-weight: bold;
+}
+
+/* Prevent content from going under navbar */
+body {
+    padding-top: 64px;
 }
 
 /* ===== MOBILE ===== */
 @media (max-width: 600px) {
-    nav#navbar ul {
+    .navbar ul {
         flex-direction: column;
         align-items: stretch;
 
@@ -100,15 +108,19 @@ nav#navbar a.active {
         min-height: unset;
     }
 
-    nav#navbar li {
+    .navbar li {
         width: 100%;
     }
 
-    nav#navbar .logo,
-    nav#navbar a {
+    .navbar .logo,
+    .navbar a {
         width: 100%;
         box-sizing: border-box;
         text-align: center;
+    }
+
+    body {
+        padding-top: 220px;
     }
 }
 </style>
