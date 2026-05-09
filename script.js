@@ -4,37 +4,44 @@ Promise.all([
 ])
 .then(([carData, raceData]) => {
 
-  const totalCars = Object.values(carData).filter(car => car.CarName).length;
-  const totalRaces = Object.keys(raceData).filter(key => key !== 'updatedDate').length;
+  const cars = carData.data || {};
+  const races = raceData.data || {};
 
-  const carUpdated = carData.updatedDate ? new Date(carData.updatedDate) : null;
-  const raceUpdated = raceData.updatedDate ? new Date(raceData.updatedDate) : null;
+  const totalCars = Object.values(cars).filter(car => car.CarName).length;
+  const totalRaces = Object.keys(races).length;
+
+  const carUpdated = carData.meta?.updatedAt ? new Date(carData.meta.updatedAt) : null;
+  const raceUpdated = raceData.meta?.updatedAt ? new Date(raceData.meta.updatedAt) : null;
 
   const format = date =>
     date
-      ? new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(date)
+      ? new Intl.DateTimeFormat('en-US', {
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric'
+        }).format(date)
       : 'Unknown';
 
   const carDate = format(carUpdated);
   const raceDate = format(raceUpdated);
 
-document.getElementById('carsStats').innerHTML = `
-  <div class="stat-number">${totalCars.toLocaleString()}</div>
-  <div class="stat-label">Cars</div>
-  <div class="stat-updated">Last Updated:</div>
-  <div class="stat-date">${carDate}</div>
-`;
+  document.getElementById('carsStats').innerHTML = `
+    <div class="stat-number">${totalCars.toLocaleString()}</div>
+    <div class="stat-label">Cars</div>
+    <div class="stat-updated">Last Updated:</div>
+    <div class="stat-date">${carDate}</div>
+  `;
 
-document.getElementById('racesStats').innerHTML = `
-  <div class="stat-number">${totalRaces.toLocaleString()}</div>
-  <div class="stat-label">Races</div>
-  <div class="stat-updated">Last Updated:</div>
-  <div class="stat-date">${raceDate}</div>
-`;
+  document.getElementById('racesStats').innerHTML = `
+    <div class="stat-number">${totalRaces.toLocaleString()}</div>
+    <div class="stat-label">Races</div>
+    <div class="stat-updated">Last Updated:</div>
+    <div class="stat-date">${raceDate}</div>
+  `;
 
 })
 .catch(err => {
   document.getElementById('carsStats').textContent = 'Failed to load stats.';
-document.getElementById('racesStats').textContent = 'Failed to load stats.';
+  document.getElementById('racesStats').textContent = 'Failed to load stats.';
   console.error(err);
 });
