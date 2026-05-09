@@ -5,10 +5,10 @@ Promise.all([
 .then(([carData, raceData]) => {
 
   const totalCars = Object.values(carData).filter(car => car.CarName).length;
-  const totalRaces = Object.keys(raceData).filter(key => key !== 'lastUpdated').length;
+  const totalRaces = Object.keys(raceData).filter(key => key !== 'updatedDate').length;
 
-  const carUpdated = carData.lastUpdated ? new Date(carData.lastUpdated) : null;
-  const raceUpdated = raceData.lastUpdated ? new Date(raceData.lastUpdated) : null;
+  const carUpdated = carData.updatedDate ? new Date(carData.updatedDate) : null;
+  const raceUpdated = raceData.updatedDate ? new Date(raceData.updatedDate) : null;
 
   const format = date =>
     date
