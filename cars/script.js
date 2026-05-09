@@ -51,10 +51,31 @@ function renderCars(list) {
     : '<p>No cars match your criteria.</p>';
 }
 
-// ===== FETCH CARS (API STYLE FIX) =====
-fetch("https://raw.githubusercontent.com/CarZoneDB/CarZoneDB.github.io/refs/heads/main/assets/infojsons/cars.json")
+// ===== FETCH CARS =====
+fetch("https://raw.githubusercontent.com/CarZoneDB/CarZoneDB.github.io/main/assets/infojsons/cars.json")
   .then(res => res.json())
   .then(api => {
-    carsData = Object.values(api.data || {}).filter(c => c.carName);
+
+    carsData = Object.values(api.data || {}).map(car => ({
+      carName: car.CarName,
+      type: car.TYPE,
+      bodyKits: car.BodyKits,
+      vmax: car.VMAX,
+      acc: car.ACC,
+      newCar: car.NEWCAR,
+      shop: car.SHOP,
+      power: car.POWER,
+      exp: car.EXP,
+      price: car.PRICE,
+      icon: car.ICON,
+      packName: car.PACKNAME,
+      gamePassId: car.GAMEPASSID
+    }))
+    .filter(car => car.carName);
+
     renderCars(carsData);
+  })
+  .catch(err => {
+    console.error("Failed to load cars:", err);
+    carList.innerHTML = "<p>Failed to load cars.</p>";
   });
