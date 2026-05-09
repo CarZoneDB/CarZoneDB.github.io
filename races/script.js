@@ -30,9 +30,10 @@ function closeMap() {
   document.getElementById("mapImage").src = "";
 }
 
-// ===== RENDER =====
-function renderRaces(data) {
-  const { lastUpdated, ...races } = data;
+// ===== RENDER RACES (API STYLE FIXED) =====
+function renderRaces(api) {
+  const races = api.data || {};
+  const lastUpdated = api.meta?.updatedAt;
 
   const difficultyOrder = {
     EASY: 1,
@@ -41,20 +42,20 @@ function renderRaces(data) {
   };
 
   const sorted = Object.entries(races).sort(([, a], [, b]) => {
-    const diffA = (a.Dificulty ?? '').toUpperCase();
-    const diffB = (b.Dificulty ?? '').toUpperCase();
+    const diffA = (a.difficulty ?? "").toUpperCase();
+    const diffB = (b.difficulty ?? "").toUpperCase();
     return (difficultyOrder[diffA] || 99) - (difficultyOrder[diffB] || 99);
   });
 
   container.innerHTML = sorted.map(([name, race]) => {
-    const rewards = race.Rewards ?? [];
-    const difficulty = (race.Dificulty ?? '').toUpperCase();
+    const rewards = race.rewards ?? [];
+    const difficulty = (race.difficulty ?? "").toUpperCase();
 
     return `
 <article class="card">
   <div class="card-header">
     <h2>${name}</h2>
-    <button class="map-btn" onclick="openMap('${race.Map}')">Map</button>
+    <button class="map-btn" onclick="openMap('${race.map}')">Map</button>
   </div>
 
   <div class="badges">
@@ -64,7 +65,7 @@ function renderRaces(data) {
   </div>
 
   <div class="details">
-    <div><strong>Laps:</strong> ${race.Laps ?? 'N/A'}</div>
+    <div><strong>Laps:</strong> ${race.laps ?? 'N/A'}</div>
     <div><strong>Players:</strong> ${rewards.length}</div>
   </div>
 
@@ -98,7 +99,7 @@ function renderRaces(data) {
   }).join('');
 }
 
-// ===== FETCH =====
+// ===== FETCH RACES =====
 fetch("https://raw.githubusercontent.com/CarZoneDB/CarZoneDB.github.io/refs/heads/main/assets/infojsons/races.json")
   .then(res => res.json())
   .then(renderRaces)
