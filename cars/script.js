@@ -227,7 +227,7 @@ document.querySelectorAll(
 });
 
 // ===== FETCH DATA =====
-fetch("https://raw.githubusercontent.com/CarZoneDB/CarZoneDB.github.io/refs/heads/main/assets/infojsons/cars.json")
+fetch("https://carzonedb.github.io/assets/infojsons/cars.json")
 
   .then(res => {
 
