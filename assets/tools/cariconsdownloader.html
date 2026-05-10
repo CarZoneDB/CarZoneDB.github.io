@@ -234,7 +234,7 @@ async function start(){
   let data;
   try{
     const r=await fetchSafe(
-      "https://raw.githubusercontent.com/CarZoneDB/CarZoneDB.github.io/refs/heads/main/assets/infojsons/cars.json"
+      "https://carzonedb.github.io/assets/infojsons/cars.json"
     );
     data=await r.json();
   }catch{
@@ -242,9 +242,17 @@ async function start(){
     return;
   }
 
-  const cars=Object.entries(data)
-    .filter(x=>x[1]?.ICON)
-    .map(([n,v])=>({n,id:v.ICON.replace("rbxassetid://","")}));
+const cars=Object.entries(data.data || {})
+  .filter(x =>
+    x[1] &&
+    typeof x[1] === "object" &&
+    !Array.isArray(x[1]) &&
+    x[1].ICON
+  )
+  .map(([n,v]) => ({
+    n: v.CarName || n,
+    id: v.ICON.replace("rbxassetid://","")
+  }));
 
   log("Images found: "+cars.length);
 
