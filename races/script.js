@@ -100,7 +100,7 @@ function renderRaces(api) {
 }
 
 // ===== FETCH RACES =====
-fetch("https://raw.githubusercontent.com/CarZoneDB/CarZoneDB.github.io/refs/heads/main/assets/infojsons/races.json")
+fetch("https://carzonedb.github.io/assets/infojsons/races.json")
   .then(res => res.json())
   .then(renderRaces)
   .catch(() => {
