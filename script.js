@@ -20,7 +20,8 @@ const format = date =>
         day: 'numeric',
         year: 'numeric',
         hour: 'numeric',
-        minute: '2-digit'
+        minute: '2-digit',
+        timeZoneName: 'short'
       }).format(date)
     : 'Unknown';
 
