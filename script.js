@@ -13,14 +13,16 @@ Promise.all([
   const carUpdated = carData.meta?.updatedAt ? new Date(carData.meta.updatedAt) : null;
   const raceUpdated = raceData.meta?.updatedAt ? new Date(raceData.meta.updatedAt) : null;
 
-  const format = date =>
-    date
-      ? new Intl.DateTimeFormat('en-US', {
-          month: 'short',
-          day: 'numeric',
-          year: 'numeric'
-        }).format(date)
-      : 'Unknown';
+const format = date =>
+  date
+    ? new Intl.DateTimeFormat('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+        hour: 'numeric',
+        minute: '2-digit'
+      }).format(date)
+    : 'Unknown';
 
   const carDate = format(carUpdated);
   const raceDate = format(raceUpdated);
